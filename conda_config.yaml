@@ -1,0 +1,24 @@
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+
+  # Packages from import_set
+  - psycopg2
+  - streamlit
+  - jsonschema
+  - requests
+  - pip
+  - tiktoken
+
+
+  # Packages from import_from_set_without_dot
+  - tenacity
+  - python-dotenv
+
+  # Packages from pip
+  - pip:
+    - datetime
+
