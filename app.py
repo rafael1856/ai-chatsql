@@ -8,8 +8,38 @@ from utils.helper_functions import  save_conversation
 from assets.dark_theme import dark
 from assets.light_theme import light
 from assets.made_by_sdw import made_by_sdw
+import os
 
+def check_env_vars():
+    vars = ['POSTGRES_SEMANTIC_DB', 'POSTGRES_USERNAME', 'POSTGRES_PASSWORD', 'POSTGRES_HOST', 'POSTGRES_PORT']
+    for var in vars:
+        if var not in os.environ:
+            print(f'Environment variable {var} is not set.')
+            return False
+    return True
+
+def check_conda_env():
+    if 'CONDA_DEFAULT_ENV' not in os.environ:
+        print('No conda environment is currently active.')
+        return False
+    else:
+        print(f'Current conda environment: {os.environ["CONDA_DEFAULT_ENV"]}')
+        return True
+    
 if __name__ == "__main__":
+
+# check precoditions to start the app
+    # check if enviroment variables are set
+    if not check_env_vars():
+        print('Please set the environment variables before starting the app.')
+        exit(1)
+    if not check_conda_env():
+        print('Please set the conda environment before starting the app.')
+        exit(1)
+      
+    # check that the database is running
+
+
 
     ########### A. SIDEBAR ###########
 

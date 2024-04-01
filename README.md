@@ -9,11 +9,7 @@ This is an AI chatbot that is able to answer any question about the information 
 * **Postgres:** The database where all the magic data resides.
 
 # Folder Structure 
-
 ```
-
-│   .env
-│   .gitignore
 │   app.py
 │   README.md
 │   requirements.txt
@@ -40,15 +36,18 @@ This is an AI chatbot that is able to answer any question about the information 
     │
     └───__pycache__
             ...
-
 ```
 
 # Installation 
 
 1. Clone this repository with 'git clone URL'
-2. Run: conda env create -n sqlchat -f conda_config.yaml
+    
+2. Run: conda env create -n sqlchat -f conda_config.yaml (only first time)
+   
 3. Run: conda activate sqlchat
-4. Install PostgreSQL
+   
+4. Install PostgreSQL (only first time)
+   
 5. Add your database credentials in the user enviroment
     in Linux bash create a file 'env-vars' with:
       export POSTGRES_SEMANTIC_DB='employees'
@@ -56,20 +55,18 @@ This is an AI chatbot that is able to answer any question about the information 
       export POSTGRES_PASSWORD='pass_database'
       export POSTGRES_HOST='localhost'
       export POSTGRES_PORT='5432'
-      and run: source ./env-vars
+      and run: source ./env-vars (everytime)
 
 6. Add your OpenAI API key in the user enviroment
     in Linux bash, add to your .bashrc file:
       export OPENAI_API_KEY='your-api-key-value'
-      then reload your .bashrc runnig source .bashrc
+      then reload your .bashrc runnig source .bashrc (only first time)
 
 # Running the Chatbot 
+  - run: chmod 775 ./start.sh (it is was not executable)
+  ./start.sh
 
-```
-streamlit run app.py
-```
-
-2. The chatbot UI will open in your default web browser. Engage and enjoy!
+1. The chatbot UI will open in your default web browser. 
 
 # How to use it
 

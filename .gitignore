@@ -1,0 +1,8 @@
+# Files
+.env
+
+#virtual environment file
+env-vars
+
+# py cahe
+__pycache__
