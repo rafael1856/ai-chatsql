@@ -1,4 +1,5 @@
 # AI Database Chatbot
+This is a fork from https://github.com/sdw-online/ai-postgres-database-chatbot
 
 This is an AI chatbot that is able to answer any question about the information stored in a relational database. The chatbot created is plugged into a Postgres database. 
 

@@ -29,8 +29,14 @@ A dataset containing details about employees, their departments, salaries, and m
 
 # Download the source file:
 wget https://raw.githubusercontent.com/neondatabase/postgres-sample-dbs/main/employees.sql.gz
+-or-
+use the database file from data folder
+cd data folder and run the code in the next step
+
 
 # Navigate to the directory where you downloaded the source file, and run the following command:
+The user/pass are the ones defined during postgres instalation
+
 pg_restore -d postgres://<user>:<password>@<hostname>/employees -Fc employees.sql.gz -c -v --no-owner --no-privileges
 
 Database objects are created in the employees schema rather than the public schema.
