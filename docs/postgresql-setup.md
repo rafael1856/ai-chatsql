@@ -33,7 +33,6 @@ wget https://raw.githubusercontent.com/neondatabase/postgres-sample-dbs/main/emp
 use the database file from data folder
 cd data folder and run the code in the next step
 
-
 # Navigate to the directory where you downloaded the source file, and run the following command:
 The user/pass are the ones defined during postgres instalation
 
@@ -46,12 +45,13 @@ Database objects are created in the employees schema rather than the public sche
 psql postgres://<user>:<password>@<hostname>/employees
 
 or 
+```
   $ sudo -i -u postgres
     postgres@black217:~$ psql
     postgres-# \list
     postgres-# \c employees 
     You are now connected to database "employees" as user "postgres".
-
+```
 # How to add users?
 
 # How to give just read/write permits ?
@@ -62,13 +62,17 @@ You are connected to database "employees" as user "postgres" via socket in "/var
 
 # How to give permissions
 --- this was not enough to run queries...asked for SCHEMA permits ---
-  rafael@black217:~/dev/chat2sql$ sudo -i -u postgres
+  ```
+  $ sudo -i -u postgres
     postgres@black217:~$ psql
     postgres-# \list
     postgres-# \c employees 
     You are now connected to database "employees" as user "postgres".
     employees-# GRANT ALL PRIVILEGES ON DATABASE employees TO rafael;
+  ```
 
 # How to make a user super-user:
+```
 postgres-# ALTER USER myuser WITH SUPERUSER;
 postgres-# \dp
+```
