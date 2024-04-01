@@ -1,0 +1,4 @@
+1) Convert to llama2 model 
+2) Extend to be able to use different models
+3) Add stock market data database
+4) Generate plots/charts from the database

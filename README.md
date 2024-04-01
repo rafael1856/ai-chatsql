@@ -47,7 +47,7 @@ This is an AI chatbot that is able to answer any question about the information 
 3. Add your database credentials in the user enviroment
     in linux bash create a file 'env-vars' in the up-folder for app.
     This file should not be at the app folder for security reasons:
-    ```json
+    ```
       export POSTGRES_SEMANTIC_DB='employees'
       export POSTGRES_USERNAME='user_database'
       export POSTGRES_PASSWORD='pass_database'
@@ -62,7 +62,7 @@ This is an AI chatbot that is able to answer any question about the information 
       then reload your .bashrc runnig source .bashrc (only first time)
 
 # Running the Chatbot 
-  - run: chmod 775 ./start.sh (it is was not executable)
+  - run: chmod 755 ./start.sh (it is was not executable)
   ./start.sh
 
    The chatbot UI will open in your default web browser. 
