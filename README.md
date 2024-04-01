@@ -10,54 +10,50 @@ This is an AI chatbot that is able to answer any question about the information 
 
 # Folder Structure 
 ```
-│   app.py
-│   README.md
-│   requirements.txt
-│
-├───assets
-│   │   dark_theme.py
-│   │   light_theme.py
-│   │   made_by_sdw.py
-│   │
-│   └───__pycache__
-│           ...
-│
-├───conversation_history
-│       ...
-│
-└───utils
-    │   api_functions.py
-    │   chat_functions.py
-    │   config.py
-    │   database_functions.py
-    │   function_calling_spec.py
-    │   helper_functions.py
-    │   system_prompts.py
-    │
-    └───__pycache__
-            ...
+.
+├── app.py
+├── assets
+│   ├── dark_theme.py
+│   ├── light_theme.py
+│   ├── made_by_sdw.py
+│   └─.....
+├── conda_config.yaml
+├── conversation_history
+│   └── ....
+├── data
+│   └── employees.sql.gz
+├── docs
+│   └── postgresql-setup.md
+├── LICENSE
+├── README.md
+├── start.sh
+└── utils
+    ├── api_functions.py
+    ├── chat_functions.py
+    ├── config.py
+    ├── database_functions.py
+    ├── function_calling_spec.py
+    ├── helper_functions.py
+    └── system_prompts.py
 ```
 
 # Installation 
 
 1. Clone this repository with 'git clone URL'
-    
-2. Run: conda env create -n sqlchat -f conda_config.yaml (only first time)
-   
-3. Run: conda activate sqlchat
-   
-4. Install PostgreSQL (only first time)
-   
-5. Add your database credentials in the user enviroment
-    in Linux bash create a file 'env-vars' with:
+      
+2. Install PostgreSQL (only first time)
+   Read document about postgresql at ./docs folder
+
+3. Add your database credentials in the user enviroment
+    in linux bash create a file 'env-vars' in the up-folder for app.
+    This file should not be at the app folder for security reasons:
       export POSTGRES_SEMANTIC_DB='employees'
       export POSTGRES_USERNAME='user_database'
       export POSTGRES_PASSWORD='pass_database'
       export POSTGRES_HOST='localhost'
       export POSTGRES_PORT='5432'
-      and run: source ./env-vars (everytime)
 
-6. Add your OpenAI API key in the user enviroment
+4. Add your OpenAI API key in the user enviroment
     in Linux bash, add to your .bashrc file:
       export OPENAI_API_KEY='your-api-key-value'
       then reload your .bashrc runnig source .bashrc (only first time)
