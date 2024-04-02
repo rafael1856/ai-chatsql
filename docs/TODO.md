@@ -4,5 +4,5 @@
 3. Extend the code to be able to use different models
 4. Add stock market data database, and make interesting questions 
 5. Generate plots/charts from the database
-6. Implement real time data incoming
+6. Implement real time data incoming - timescale
 7. Develop a AI report for the new discover from the real time data source

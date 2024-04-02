@@ -9,6 +9,27 @@ from assets.dark_theme import dark
 from assets.light_theme import light
 from assets.made_by_sdw import made_by_sdw
 import os
+import markdown
+
+def save_conversation_as_html(conversation):
+    # print(conversation[0])  # print the first dictionary to see its keys
+    conversation_str = '\n'.join([msg['content'] for msg in conversation])
+    html_content = conversation_str #markdown.markdown(conversation_str)
+    html_page = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Conversation</title>
+    </head>
+    <body>
+        {html_content}
+    </body>
+    </html>
+    """
+    file_path = 'conversation_history/html_page.tml'
+    with open(file_path, 'w') as f:
+        f.write(html_page)
+    return str(file_path)
 
 def check_env_vars():
     vars = ['POSTGRES_SEMANTIC_DB', 'POSTGRES_USERNAME', 'POSTGRES_PASSWORD', 'POSTGRES_HOST', 'POSTGRES_PORT']
@@ -25,7 +46,7 @@ def check_conda_env():
     else:
         print(f'Current conda environment: {os.environ["CONDA_DEFAULT_ENV"]}')
         return True
-    
+
 if __name__ == "__main__":
 
 # check precoditions to start the app
@@ -38,8 +59,6 @@ if __name__ == "__main__":
         exit(1)
       
     # check that the database is running
-
-
 
     ########### A. SIDEBAR ###########
 
@@ -66,8 +85,14 @@ if __name__ == "__main__":
     ### SAVE CONVERSATION BUTTON ###
 
     # Add a button to SAVE the chat/conversation
-    if st.sidebar.button("Save Conversation💾"):
+    if st.sidebar.button("Save Conversation MD"):
         saved_file_path = save_conversation(st.session_state["full_chat_history"])
+        st.sidebar.success(f"Conversation saved to: {saved_file_path}")
+        st.sidebar.markdown(f"Conversation saved! [Open File]({saved_file_path})")
+
+    # Add a button to SAVE the chat/conversation
+    if st.sidebar.button("Save Conversation HTML"):
+        saved_file_path = save_conversation_as_html(st.session_state["full_chat_history"])
         st.sidebar.success(f"Conversation saved to: {saved_file_path}")
         st.sidebar.markdown(f"Conversation saved! [Open File]({saved_file_path})")
 
