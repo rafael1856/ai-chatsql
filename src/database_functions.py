@@ -1,5 +1,5 @@
 import psycopg2
-from utils.config import db_credentials
+from config import db_credentials
 
 # Establish connection with PostgreSQL
 try:
