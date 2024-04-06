@@ -6,3 +6,4 @@ env-vars
 
 # py cahe
 __pycache__
+chatsql/conversation_history/*.*

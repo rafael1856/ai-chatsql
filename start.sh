@@ -3,7 +3,7 @@
 # This script is used to start the SQLChat application.
 
 # Load the environment variables, this file is not in the repo for security reasons
-source ../env-vars
+source .env
 
 enviro='sqlchat'
 if !(conda info --envs | grep -q $enviro); then
