@@ -13,11 +13,6 @@ This is an AI chatbot that is able to answer any question about the information 
 ```
 .
 ├── app.py
-├── assets
-│   ├── dark_theme.py
-│   ├── light_theme.py
-│   ├── made_by_sdw.py
-│   └─.....
 ├── conda_config.yaml
 ├── conversation_history
 │   └── ....
@@ -45,8 +40,8 @@ This is an AI chatbot that is able to answer any question about the information 
 2. Install PostgreSQL (only first time)
    Read document about postgresql at ./docs folder
 
-3. Add your database credentials in the user enviroment
-    in linux bash create a file 'env-vars' in the up-folder for app.
+3. Add your database credentials in the user enviroment.
+    In linux bash create a file 'env-vars' in the up-folder for app.
     This file should not be at the app folder for security reasons:
     ```
       export POSTGRES_SEMANTIC_DB='employees'

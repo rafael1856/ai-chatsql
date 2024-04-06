@@ -1,4 +1,4 @@
-from utils.database_functions import database_schema_string
+from database_functions import database_schema_string
 
 # Specify function descriptions for OpenAI function calling 
 functions = [

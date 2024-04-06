@@ -20,14 +20,15 @@ Imports:
 """
 
 import streamlit as st
-from utils.config import db_credentials, MAX_TOKENS_ALLOWED, MAX_MESSAGES_TO_OPENAI, TOKEN_BUFFER
-from utils.system_prompts import get_final_system_prompt
-from utils.chat_functions import run_chat_sequence, clear_chat_history, count_tokens, prepare_sidebar_data
-from utils.database_functions import database_schema_dict
-from utils.function_calling_spec import functions
-from utils.helper_functions import  save_conversation
 import os
 import markdown
+from config import db_credentials, MAX_TOKENS_ALLOWED, MAX_MESSAGES_TO_OPENAI, TOKEN_BUFFER
+from system_prompts import get_final_system_prompt
+from chat_functions import run_chat_sequence, clear_chat_history, count_tokens, prepare_sidebar_data
+from database_functions import database_schema_dict
+from function_calling_spec import functions
+from helper_functions import  save_conversation
+
 
 def check_env_vars():
   """
