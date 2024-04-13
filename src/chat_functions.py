@@ -23,7 +23,12 @@ def run_chat_sequence(messages, functions):
 
   internal_chat_history = st.session_state["live_chat_history"].copy()
 
+
+  print(" ********** chat-reposponse(messages)",messages)
+  print(" ********** chat-reposponse(functions)",functions)
   chat_response = send_api_request_to_openai_api(messages, functions)
+  print(" ********** chat-reposponse",chat_response.json())
+
   assistant_message = chat_response.json()["choices"][0]["message"]
   
   if assistant_message["role"] == "assistant":

@@ -16,7 +16,7 @@ Exceptions:
 - ConnectionError: Raised when a request to the OpenAI API fails.
 """
 
-
+from openai import OpenAI
 import json
 import requests
 from config import OPENAI_API_KEY, AI_MODEL
@@ -44,13 +44,37 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
     ConnectionError: If there is a failure to connect to the OpenAI API.
   """
   try:
-    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
+
+    # client = OpenAI(base_url="http://localhost:8083/v1", api_key="lm-studio")
+
+    # completion = client.chat.completions.create(
+    #   model="TheBloke/Mistral-7B-Instruct-v0.1-GGUF/mistral-7b-instruct-v0.1.Q4_K_S.gguf",
+    #   messages=[
+    #     {"role": "system", "content": "Always answer like an infant of 8 years old."},
+    #     {"role": "user", "content": "Tell me what do you want to play with me."},
+    #   ],
+    #   temperature=0.3,
+    # )
+
+    # print(completion.choices[0].message)
+
+
+    # headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
+    headers = {"Content-Type": "application/json", "Authorization": "lm-studio"}
+
+    model="TheBloke/Mistral-7B-Instruct-v0.1-GGUF/mistral-7b-instruct-v0.1.Q4_K_S.gguf",
     json_data = {"model": model, "messages": messages}
+
     if functions: 
       json_data.update({"functions": functions})
+
     if function_call: 
       json_data.update({"function_call": function_call})
-    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=json_data)
+
+    # response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=json_data)
+    response = requests.post("http://localhost:8083/v1/chat/completions", headers=headers, json=json_data)
+
+
     response.raise_for_status()
 
     return response
