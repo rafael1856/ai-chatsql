@@ -1,0 +1,2 @@
+psycopg2 streamlit jsonschema requests pip tiktoken datetime tenacity python-dotenv
+

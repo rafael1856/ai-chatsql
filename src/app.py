@@ -27,7 +27,7 @@ from system_prompts import get_final_system_prompt
 from chat_functions import run_chat_sequence, clear_chat_history, count_tokens, prepare_sidebar_data
 from database_functions import database_schema_dict
 from function_calling_spec import functions
-from helper_functions import  save_conversation
+from helper_functions import save_conversation
 
 
 def check_env_vars():
@@ -66,7 +66,8 @@ if __name__ == "__main__":
     if not check_conda_env():
         print('Please set the conda environment before starting the app.')
         exit(1)
-      
+
+    st.sidebar.markdown(f"database_schema_dict : ' {database_schema_dict} '") # DEBUG
     sidebar_data = prepare_sidebar_data(database_schema_dict)
 
     st.sidebar.title("Postgres DB Objects Viewer")

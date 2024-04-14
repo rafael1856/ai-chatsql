@@ -38,11 +38,16 @@ The user/pass are the ones defined during postgres instalation
 
 pg_restore -d postgres://<user>:<password>@<hostname>/employees -Fc employees.sql.gz -c -v --no-owner --no-privileges
 
+pg_restore -d postgres://postgres:admin123@localhost/employees -Fc employees.sql.gz -c -v --no-owner --no-privileges
+
 Database objects are created in the employees schema rather than the public schema.
 
 # Connect to the employees database:
 
 psql postgres://<user>:<password>@<hostname>/employees
+
+psql postgres://postgres:admin123@localhost/employees
+
 
 or 
 ```
@@ -69,6 +74,7 @@ You are connected to database "employees" as user "postgres" via socket in "/var
     postgres-# \c employees 
     You are now connected to database "employees" as user "postgres".
     employees-# GRANT ALL PRIVILEGES ON DATABASE employees TO rafael;
+    employees-# GRANT ALL PRIVILEGES ON DATABASE employees TO postgres;
   ```
 
 # How to make a user super-user:
@@ -76,3 +82,6 @@ You are connected to database "employees" as user "postgres" via socket in "/var
 postgres-# ALTER USER myuser WITH SUPERUSER;
 postgres-# \dp
 ```
+
+postgres-# ALTER USER postgres WITH SUPERUSER;
+postgres-# \dp

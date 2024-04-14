@@ -25,7 +25,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Set up Postgres database credentials
+# # Set up Postgres database credentials
 db_credentials = {
     'dbname'    :   os.getenv("POSTGRES_SEMANTIC_DB"),
     'user'      :   os.getenv("POSTGRES_USERNAME"),
@@ -34,9 +34,24 @@ db_credentials = {
     'port'      :   os.getenv("POSTGRES_PORT")
 }
 
+# HACKY HACKY HACKY
+# db_credentials = {
+#     'dbname'    :   "employees",
+#     'user'      :   "postgres",
+#     'password'  :   "admin123",
+#     'host'      :   "localhost",
+#     'port'      :   "5432"
+# }
+
+
+# Set up API Key and other variables for the LM Studio
+LM_STUDIO_API_KEY = "lm-studio"
+AI_MODEL = "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
+
 # Set up OpenAI variables 
-OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
-AI_MODEL        =   'gpt-3.5-turbo-16k'
+#OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
+#AI_MODEL = "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
+#AI_MODEL        =   'gpt-3.5-turbo-16k'         # rich commented this out
 # AI_MODEL        =   'gpt-4'
 
 # Max number of tokens permitted within a conversation exchange via OpenAI API

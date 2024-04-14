@@ -1,0 +1,5 @@
+set POSTGRES_SEMANTIC_DB="employees"
+set POSTGRES_USERNAME="postgres"
+set POSTGRES_PASSWORD="admin123"
+set POSTGRES_HOST="localhost"
+set POSTGRES_PORT="5432"

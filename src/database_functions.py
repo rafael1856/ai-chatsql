@@ -1,3 +1,8 @@
+"""
+    TODO: add more error-handling 
+    TODO: error-reporting and logging
+    
+"""
 import psycopg2
 from config import db_credentials
 
@@ -5,7 +10,9 @@ from config import db_credentials
 try:
   postgres_connection = psycopg2.connect(**db_credentials)
 except psycopg2.OperationalError:
-  print('Unable to connect to the database. Please make sure the database is running.')
+  print(f"Unable to connect to the database using {postgres_connection}. Please make sure the database is running.")
+  print(f"Connection Details: {postgres_connection.dsn}")  # DEBUG
+  print(f"db_credentials : ' {db_credentials} '")  # DEBUG
   exit(1)
 
 postgres_connection.set_session(autocommit=True)
@@ -86,6 +93,10 @@ def get_database_info(connection, schema_names):
     for table_name in get_table_names(connection, schema):
       column_names = get_column_names(connection, table_name, schema)
       table_dicts.append({"table_name": table_name, "column_names": column_names, "schema_name": schema})
+      
+  print(f"schema : ' {schema} '") # DEBUG
+  print(f"schema_names : ' {schema_names} '") # DEBUG
+  print(f"table_dicts : ' {table_dicts} '") # DEBUG
   return table_dicts
 
 def ask_postgres_database(connection, query):
@@ -111,6 +122,7 @@ def ask_postgres_database(connection, query):
 # To print details to the console:
 # schemas = get_schema_names(postgres_connection)
 # here you need to set schema name from postgres by default the schema is public in postgres database. you can see in pgadmin
+#schemas = ['employees']
 schemas = ['employees']
 database_schema_dict = get_database_info(postgres_connection, schemas)
 database_schema_string = "\n".join(
@@ -119,3 +131,6 @@ database_schema_string = "\n".join(
         for table in database_schema_dict
     ]
 )
+
+print(f"database_schema_dict : ' {database_schema_dict} '") # DEBUG
+print(f"database_schema_string : ' {database_schema_string} '") # DEBUG

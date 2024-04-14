@@ -30,10 +30,15 @@ def run_chat_sequence(messages, functions):
     internal_chat_history.append(assistant_message)
 
   if assistant_message.get("function_call"):
+
     results = execute_function_call(assistant_message)
+
     internal_chat_history.append({"role": "function", "name": assistant_message["function_call"]["name"], "content": results})
+
     internal_chat_history.append({"role": "user", "content": "You are a data analyst - provide personalized/customized explanations on what the results provided means and link them to the the context of the user query using clear, concise words in a user-friendly way. Or answer the question provided by the user in a helpful manner - either way, make sure your responses are human-like and relate to the initial user input. Your answers must not exceed 200 characters"})
+
     chat_response = send_api_request_to_openai_api(internal_chat_history, functions)
+    
     assistant_message = chat_response.json()["choices"][0]["message"]
     if assistant_message["role"] == "assistant":
       st.session_state["live_chat_history"].append(assistant_message)
