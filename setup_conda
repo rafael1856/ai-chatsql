@@ -1,0 +1,45 @@
+#!/bin/bash -x
+
+# Function to check if a Conda environment is activated
+is_conda_env_activated() {
+  local env_name="$1"
+  if [[ "$CONDA_DEFAULT_ENV" == "$enviro" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Check if .env file exists
+if [ ! -f .env ]; then
+  echo "Error: .env file not found."
+  exit 1
+fi
+
+# Load the environment variables
+source .env
+
+# get enviroment name from the conda_config.yaml file
+yaml_file_path="./conda_config.yaml"
+enviro=$(grep 'name:' "$yaml_file_path" | awk '{print $2}')
+
+# Check if the environment exists
+if ! conda env list | grep -q "$enviro"; then
+  echo "Creating a new conda environment named $enviro..."
+  # Create a new conda environment named "$enviro" using the configuration file "conda_config.yaml"
+  conda env create -f conda_config.yaml
+fi
+
+# Check if CONDA_PREFIX is set
+if [ -z "$CONDA_PREFIX" ]; then
+  conda activate "$enviro"
+fi
+
+if [[ "$CONDA_DEFAULT_ENV" == "$enviro" ]]; then
+  echo "The conda environment $enviro is already activated."
+else
+  echo "Activating the conda environment $enviro..."
+  conda activate "$enviro"
+fi
+
+
