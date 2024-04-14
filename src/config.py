@@ -20,8 +20,9 @@ Variables:
     MAX_MESSAGES_TO_OPENAI (int): The maximum number of messages to exchange with the OpenAI API.
     TOKEN_BUFFER (int): An arbitrary number to provide a buffer to avoid reaching exact token limits.
 """
-import os 
+import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -34,7 +35,7 @@ db_credentials = {
     'port'      :   os.getenv("POSTGRES_PORT")
 }
 
-# Set up OpenAI variables 
+# Set up OpenAI variables
 OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
 AI_MODEL        =   'gpt-3.5-turbo-16k'
 # AI_MODEL        =   'gpt-4'
@@ -46,4 +47,5 @@ MAX_TOKENS_ALLOWED      =   3000
 MAX_MESSAGES_TO_OPENAI  =   5
 
 # An arbitrary number to provide a buffer to avoid reaching exact token limits
-TOKEN_BUFFER            =   100  
+TOKEN_BUFFER            =   100
+

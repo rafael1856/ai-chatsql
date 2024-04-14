@@ -1,5 +1,9 @@
 import psycopg2
 from config import db_credentials
+from logger_config import configure_logger_from_file
+
+# Configure the logger based on the parameter file
+logger = configure_logger_from_file('config.json')
 
 # Establish connection with PostgreSQL
 try:
