@@ -16,7 +16,8 @@ Inspect the Exception: Modify the send_api_request_to_openai_api function to pri
 This module contains functions for interacting with the OpenAI API.
 
 Functions:
-- send_api_request_to_openai_api: Sends a request to the OpenAI API's chat completions endpoint. This function is decorated with a retry mechanism that waits for a random exponential time between attempts and stops after 3 attempts.
+- send_api_request_to_openai_api: Sends a request to the OpenAI API's chat completions endpoint.  
+  Uses retry decorator that delays a random exponential time between attempts; stops after 3 attempts.
 - execute_function_call: Executes a function call provided by the OpenAI API's response.
 
 Imports:
@@ -36,6 +37,13 @@ from config import LM_STUDIO_API_KEY, AI_MODEL
 from database_functions import ask_postgres_database, postgres_connection
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
+import logging
+from datetime import datetime
+
+# Configure logging
+log_filename = f"app_log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 # Initialize the OpenAI client with the local server URL and API key
 openai = OpenAI(base_url="http://localhost:1234/v1", api_key=LM_STUDIO_API_KEY)
 
@@ -43,8 +51,8 @@ openai = OpenAI(base_url="http://localhost:1234/v1", api_key=LM_STUDIO_API_KEY)
 def send_api_request_to_openai_api(messages, functions=None, function_call=None, model=AI_MODEL):
     """
     Send the API request to the LMStudio API via Chat Completions endpoint.
-    # This function prepares the request_data object with all parameters needed for the API request.
-    # The parameters include the model, messages, functions, and function_call parameters.
+    # Function prepares request_data object with all parameters needed for the API request.
+    # Parameters include the model, messages, functions, and function_call parameters.
 
     Args:
         messages (list): A list of message objects containing 'role' and 'content' keys.
@@ -52,29 +60,34 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
         function_call (dict, optional): A dictionary representing the function call. Defaults to None.
         model (str, optional): The model to use for the API request. Defaults to AI_MODEL.
 
-    Returns:
-        dict: The response object from the API request.
-
-    Raises:
-        ConnectionError: If there is a failure to connect to the LMStudio API.
+    Returns: dict: The response object from the API request.
+    Raises:  ConnectionError: If there is a failure to connect to the LMStudio API.
     """
+    
+    logging.info("input args for send_api_request_to_openai_api(messages: %s, functions: %s, function_call: %s, model: %s", messages, functions, function_call, model)
+    
     try:
         # Prepare the request_data object with all parameters needed for the API request
         # The function is called with the model, messages, functions, and function_call parameters
         request_data = {
             "model": model,
             "messages": messages, 
-            #"functions": functions,
-            #"function_call": function_call
+            #"functions": functions,            # RSL added comment to clarity structur of request_data.
+            #"function_call": function_call     
         }
         if functions: 
             request_data.update({"functions": functions})
         if function_call: 
             request_data.update({"function_call": function_call})
 
+        print(f"Actual request_data: {request_data} sent to LMStudio API \n")
+        
         # Send the request using the OpenAI client
         response = openai.ChatCompletion.create(**request_data)
-
+        
+        print(f"Response: {response} received from LMStudio API \n")
+        logging.info("Response: {response} received from LMStudio API")
+        
         return response
 
     except Exception as e:
@@ -84,21 +97,22 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
 def execute_function_call(message):
     """
     Run the function call provided by LMStudio's API response.
-
-    Args:
-        message (dict): The API response message containing the function call details.
-
-    Returns:
-        str: The results of the function call.
-
+    Args:  message (dict): The API response message containing the function call details.
+    Returns:  str: The results of the function call.
     Raises:
         None
     """
+    
+    logging.info("execute_function_call input argument: {message}")
+    
     if message["function_call"]["name"] == "ask_postgres_database":
         query = json.loads(message["function_call"]["arguments"])["query"]
-        print(f"SQL query: {query} \n")
+        print(f"SQL query: {query} \n")     # TODO: These SQL statments should be saved for reuse.
         results = ask_postgres_database(postgres_connection, query)
-        print(f"Results A: {results} \n")
+        print(f"Results A: {results} \n")   # TODO: These query results should be saved in a report.
     else:
         results = f"Error: function {message['function_call']['name']} does not exist"
+        
+    logging.info("execute_function_call() returned results: {results}")
+    
     return results

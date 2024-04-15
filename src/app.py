@@ -18,7 +18,7 @@ Imports:
 - os: Used for interacting with the operating system.
 - markdown: Used for converting markdown text to HTML.
 """
-
+from openai import OpenAI
 import streamlit as st
 import os
 import markdown
@@ -29,6 +29,12 @@ from database_functions import database_schema_dict
 from function_calling_spec import functions
 from helper_functions import save_conversation
 
+import logging
+from datetime import datetime
+
+# Configure logging
+log_filename = f"app_log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def check_env_vars():
   """
@@ -50,6 +56,7 @@ def check_conda_env():
 
   Returns:
     bool: True if a conda environment is active, False otherwise.
+    TODO: add more error-reporting and logging
   """
   if 'CONDA_DEFAULT_ENV' not in os.environ:
     print('No conda environment is currently active.')
@@ -67,7 +74,6 @@ if __name__ == "__main__":
         print('Please set the conda environment before starting the app.')
         exit(1)
 
-    st.sidebar.markdown(f"database_schema_dict : ' {database_schema_dict} '") # DEBUG
     sidebar_data = prepare_sidebar_data(database_schema_dict)
 
     st.sidebar.title("Postgres DB Objects Viewer")
@@ -88,6 +94,9 @@ if __name__ == "__main__":
     if st.sidebar.button("Clear Conversation"):
         save_conversation(st.session_state["full_chat_history"]) 
         clear_chat_history()
+
+    st.markdown("-----------------------")
+    st.sidebar.text(f"database_schema_dict: {database_schema_dict}")
 
     st.title("AI chat with a database")
 
@@ -128,5 +137,10 @@ if __name__ == "__main__":
         progress = min(1.0, max(0.0, current_tokens / max_tokens))
         st.progress(progress)
         st.write(f"Tokens Used: {current_tokens}/{max_tokens}")
+
         if current_tokens > max_tokens:
-            st.warning("Note: Due to character limits, some older messages might not be considered in ongoing conversations with the AI.")
+            st.warning("Note: Due to character limits, older messages might not be considered in ongoing AI conversations.")
+            st.warning("Please clear the conversation history to start fresh.")
+            st.warning("You can save the conversation before clearing it.")
+            st.warning("Conversation will be saved as 'conversation.md' in current folder.")
+            st.warning("Please note that the conversation history will be cleared after saving.")
