@@ -48,6 +48,7 @@ def run_chat_sequence(messages, functions):
     Raises:
         KeyError: If the assistant message does not have a 'role' key.
     """
+    logger.debug(f"Entering run_chat_sequence with messages: {messages}, functions: {functions}")
     if "live_chat_history" not in st.session_state:
         st.session_state["live_chat_history"] = [{"role": "assistant", "content": "Hello! I'm Andy, how can I assist you?"}]
         # st.session_state["live_chat_history"] = []
@@ -55,7 +56,7 @@ def run_chat_sequence(messages, functions):
     internal_chat_history = st.session_state["live_chat_history"].copy()
 
     chat_response = send_api_request_to_openai_api(messages, functions)
-    assistant_message = chat_response.json()["choices"][0]["message"]   
+    assistant_message = chat_response.json()["choices"][0]["message"]
     if assistant_message["role"] == "assistant":
         internal_chat_history.append(assistant_message)
 
@@ -67,8 +68,9 @@ def run_chat_sequence(messages, functions):
         assistant_message = chat_response.json()["choices"][0]["message"]
         if assistant_message["role"] == "assistant":
             st.session_state["live_chat_history"].append(assistant_message)
-
-    return st.session_state["live_chat_history"][-1]
+    results = st.session_state["live_chat_history"][-1]
+    logger.debug(f"Exiting run_chat_sequence with last message:{results}")
+    return results
 
 def clear_chat_history():
     """Clears the chat history stored in the Streamlit session state.
@@ -97,11 +99,12 @@ def count_tokens(text):
     Returns:
         int: The total number of tokens used in the text string.
     """
-    if not isinstance(text, str):  
-        return 0 
+    logger.debug(f"Entering count_tokens with text: {text}")
+    if not isinstance(text, str):
+        return 0
     encoding = tiktoken.encoding_for_model(AI_MODEL)
     total_tokens_in_text_string = len(encoding.encode(text))
-    
+    logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
     return total_tokens_in_text_string
 
 def prepare_sidebar_data(database_schema_dict):
@@ -115,6 +118,7 @@ def prepare_sidebar_data(database_schema_dict):
         dict: A dictionary representing the sidebar data, organized by schema and table names.
 
     """
+    logger.debug(f"Entering prepare_sidebar_data with database_schema_dict: {database_schema_dict}")
     sidebar_data = {}
     for table in database_schema_dict:
         schema_name = table["schema_name"]
@@ -125,5 +129,5 @@ def prepare_sidebar_data(database_schema_dict):
             sidebar_data[schema_name] = {}
 
         sidebar_data[schema_name][table_name] = columns
+    logger.debug(f"Exiting prepare_sidebar_data with sidebar_data: {sidebar_data}")
     return sidebar_data
-

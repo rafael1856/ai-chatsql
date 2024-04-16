@@ -42,6 +42,7 @@ def check_env_vars():
     varis = ['POSTGRES_SEMANTIC_DB', 'POSTGRES_USERNAME', 'POSTGRES_PASSWORD', 'POSTGRES_HOST', 'POSTGRES_PORT']
     for var in varis:
         if var not in os.environ:
+            logger.debug(f"Environment variable {var} is not set.")
             print(f'Environment variable {var} is not set.')
             return False
     return True

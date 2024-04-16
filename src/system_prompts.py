@@ -48,7 +48,7 @@ Please adhere to these guidelines during interactions:
 
 Begin with a brief introduction as Andy and offer an overview of available metrics. However, avoid naming every table or schema. The introduction must not exceed 300 characters under any circumstance.
 
-For each SQL output, include a brief rationale, display the outcome, and provide an explanation in context to the user's original request. Always format SQL as {{database}}.{{schema}}.{{table}}.
+For each SQL output, include a brief rationale, display the outcome in the chat, and provide an explanation in context to the user's original request. Always format SQL as {{database}}.{{schema}}.{{table}}.
 
 Before presenting, confirm the validity of SQL scripts and dataframes. Assess if a user's query truly needs a database response. If not, guide them as necessary.
 
@@ -63,11 +63,15 @@ def get_table_context(schema: str, table: str, db_credentials: dict):
     Args:
         schema (str): The schema name of the table.
         table (str): The table name.
-        db_credentials (dict): A dictionary containing the credentials to connect to the database.
+        db_credentials (dict): A dictionary containing the credentials to connect \
+            to the database.
 
     Returns:
         str: The context information for the table, including the table name and its columns.
     """
+    logger.debug(f"get_table_context called with schema: {schema},\
+                 table: {table}, db_credentials: {db_credentials}")
+
     conn = psycopg2.connect(**db_credentials)
     cursor = conn.cursor()
     cursor.execute(f"""
@@ -84,6 +88,8 @@ def get_table_context(schema: str, table: str, db_credentials: dict):
     """
     cursor.close()
     conn.close()
+    logger.debug(f"get_table_context returning: {context}")
+
     return context
 
 def get_all_tables_from_db(db_credentials: dict):
@@ -96,6 +102,8 @@ def get_all_tables_from_db(db_credentials: dict):
     Returns:
     list: A list of tuples representing the table schema and table name.
     """
+    logger.debug(f"get_all_tables_from_db called with db_credentials: {db_credentials}")
+
     conn = psycopg2.connect(**db_credentials)
     cursor = conn.cursor()
     cursor.execute("""
@@ -107,7 +115,7 @@ def get_all_tables_from_db(db_credentials: dict):
     conn.close()
 
     # Logging entry
-    logger.info(f"Retrieved all tables from the database: {tables}")
+    logger.debug(f"get_all_tables_from_db returning: {tables}")
     return tables
 
 def get_all_table_contexts(db_credentials: dict):
@@ -120,9 +128,13 @@ def get_all_table_contexts(db_credentials: dict):
     Returns:
         str: A string containing all the table contexts, separated by newlines.
     """
+    logger.debug(f"get_all_table_contexts called with db_credentials: {db_credentials}")
+
     tables = get_all_tables_from_db(db_credentials)
     table_contexts = [get_table_context(schema, table, db_credentials) for schema, table in tables]
-    return '\n'.join(table_contexts)
+    result = '\n'.join(table_contexts)
+    logger.debug(f"get_all_table_contexts returning: {result}")
+    return result
 
 def get_data_dictionary(db_credentials: dict):
     """
@@ -136,6 +148,7 @@ def get_data_dictionary(db_credentials: dict):
             and the values are dictionaries representing the columns of each table, where the keys are the
             column names and the values are the data types.
     """
+    logger.debug(f"get_data_dictionary called with db_credentials: {db_credentials}")
     tables = get_all_tables_from_db(db_credentials)
     data_dict = {}
     for schema, table in tables:
@@ -149,6 +162,7 @@ def get_data_dictionary(db_credentials: dict):
         data_dict[f"{schema}.{table}"] = {col[0]: col[1] for col in columns}
         cursor.close()
         conn.close()
+    logger.debug(f"get_data_dictionary returning: {data_dict}")
     return data_dict
 
 def get_final_system_prompt(db_credentials: dict):
@@ -161,7 +175,11 @@ def get_final_system_prompt(db_credentials: dict):
     Returns:
         str: The final system prompt for generating SQL.
     """
-    return GENERATE_SQL_PROMPT
+    logger.debug(f"get_final_system_prompt called with db_credentials: {db_credentials}")
+
+    result = GENERATE_SQL_PROMPT
+    logger.debug(f"get_final_system_prompt returning: {result}")
+    return result
 
 
 
@@ -170,6 +188,7 @@ if __name__ == "__main__":
     st.header("System prompt for AI Database Chatbot")
     # Display the data dictionary
     data_dict = get_data_dictionary(db_credentials=db_credentials)
+    
     data_dict_str = "\n".join(
         [f"{table}:\n" + "\n".join(
             [f"    {column}: {dtype}" for column, dtype in columns.items()]) for table, columns in data_dict.items()])

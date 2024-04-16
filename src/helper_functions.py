@@ -38,6 +38,7 @@ def save_conversation(conversation_history, directory="conversation_history"):
         str: The file path of the saved conversation.
 
     """
+    logger.debug(f"Entering save_conversation with conversation_history: {conversation_history}, directory: {directory}")
     # Create the directory if it doesn't exist
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -52,5 +53,5 @@ def save_conversation(conversation_history, directory="conversation_history"):
                 message_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 role_icon = '🧑‍💻' if message["role"] == "user" else '🤖'
                 file.write(f"{message_timestamp} **{role_icon} {message['role'].title()}:** {message['content']}\n\n")
+    logger.debug(f"Exiting save_conversation with file_path: {file_path}")
     return file_path
-

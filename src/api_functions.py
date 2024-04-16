@@ -19,6 +19,7 @@ Exceptions:
 #
 #TODO: THIS IS THE REFACTORED VERSION OF THE ORIGINAL CODE THAT USED REQUESTS.GET() directly.
 #TODO: EXPLAIN THE CHANGES MADE AND WHY THEY WERE MADE.
+
 #TODO: use this Phind Debug information
 #The RetryError you're encountering indicates that the send_api_request_to_openai_api function, which is decorated
 #with a retry mechanism using tenacity, has failed to execute successfully after the specified number of retry attempts.
@@ -64,16 +65,22 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
     Raises:
         ConnectionError: If there is a failure to connect to the OpenAI API.
     """
+    logger.debug(f"Entering send_api_request_to_openai_api with messages: {messages}, functions: {functions}, \
+                 function_call: {function_call}, model: {model}, openai_api_key: {openai_api_key}")
+
     try:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
         json_data = {"model": model, "messages": messages}
+        logger.debug(f"model: {model}\n")
+        logger.debug(f"messages: {messages}\n")
         if functions:
             json_data.update({"functions": functions})
         if function_call:
             json_data.update({"function_call": function_call})
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, \
-                                 json=json_data, timeout=20)
+                                 json=json_data, timeout=60)
         response.raise_for_status()
+        logger.debug(f"response: {response}\n")
         return response
     except requests.RequestException as error:
         raise ConnectionError(f"Failed to connect to OpenAI API due to: {error}") from error
@@ -92,11 +99,14 @@ def execute_function_call(message):
         None
 
     """
+    logger.debug(f"Entering execute_function_call with message: {message}")
     if message["function_call"]["name"] == "ask_postgres_database":
         query = json.loads(message["function_call"]["arguments"])["query"]
-        print(f"SQL query: {query} \n")
+        # print(f"SQL query: {query} \n")
+        logger.debug(f"SQL query: {query} \n")
         results = ask_postgres_database(postgres_connection, query)
-        print(f"Results A: {results} \n")
+        # print(f"Results A: {results} \n")
+        logger.debug(f"Results A: {results} \n")
     else:
         results = f"Error: function {message['function_call']['name']} does not exist"
     return results
