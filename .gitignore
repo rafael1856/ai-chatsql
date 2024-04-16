@@ -1,4 +1,5 @@
 .env
 *.pyc
 __pycache__
-chatsql/conversation_history/*.*
+conversation_history/*.*
+*.log

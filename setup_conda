@@ -1,19 +1,40 @@
-#!/bin/bash -x
+#!/bin/bash
 
-# Function to check if a Conda environment is activated
-is_conda_env_activated() {
-  local env_name="$1"
-  if [[ "$CONDA_DEFAULT_ENV" == "$enviro" ]]; then
-    return 0
-  else
-    return 1
-  fi
-}
+# This script sets up the Conda environment for the AI Database Chatbot project.
+# It checks for the existence of a .env file, loads environment variables from it,
+# and ensures the specified Conda environment is activated.
+#
+# Parameters:
+#   None
+#
+# Environment Variables:
+#   - CONDA_PREFIX: If set, the script assumes the Conda environment is already activated.
+#
+# Behavior:
+#   - If the .env file does not exist, the script prints an error message and exits.
+#   - The script loads environment variables from the .env file.
+#   - It checks if the specified Conda environment exists and creates it if necessary.
+#   - If the Conda environment is not activated, the script activates it.
+#
+# Usage:
+#   source setup_conda
+#
+# Dependencies:
+#   - Conda must be installed and accessible in the system's PATH.
+#   - The .env file must be present in the project directory.
+#   - The conda_config.yaml file must be present in the project directory and contain the name of the Conda environment.
+#
+# Returns:
+#   - 0 if the Conda environment is successfully activated or already activated.
+#   - 1 if the .env file is not found.
+#
+
 
 # Check if .env file exists
 if [ ! -f .env ]; then
   echo "Error: .env file not found."
-  exit 1
+  echo "Please, create a .env file. Instructions can be found in the README.md file."
+  return 1
 fi
 
 # Load the environment variables
