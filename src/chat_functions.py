@@ -38,17 +38,12 @@ def run_chat_sequence(messages, functions):
     """
     Runs a chat sequence with the given messages and functions.
 
-    Args:
-        messages (list): A list of messages exchanged in the chat sequence.
-        functions (dict): A dictionary of available functions.
-
-    Returns:
-        dict: The last message in the chat history.
-
-    Raises:
-        KeyError: If the assistant message does not have a 'role' key.
+  Args:  messages (list):  Messages List exchanged in the chat sequence.
+           functions (dict): A dictionary of available functions.
+    Returns: dict: The last message in the chat history.
+    Raises: KeyError: If the assistant message does not have a 'role' key.
     """
-    logger.debug(f"Entering run_chat_sequence with messages: {messages}, functions: {functions}")
+    logger.debug("run_chat_sequence started with messages: %s and functions: %s", messages, functions)
     if "live_chat_history" not in st.session_state:
         st.session_state["live_chat_history"] = [{"role": "assistant", "content": "Hello! I'm Andy, how can I assist you?"}]
         # st.session_state["live_chat_history"] = []
@@ -56,20 +51,36 @@ def run_chat_sequence(messages, functions):
     internal_chat_history = st.session_state["live_chat_history"].copy()
 
     chat_response = send_api_request_to_openai_api(messages, functions)
-    assistant_message = chat_response.json()["choices"][0]["message"]
-    if assistant_message["role"] == "assistant":
+
+        # # response = openai.ChatCompletion.create(**request_data)
+        # response = client.chat.completions.create(**request_data)
+
+    # assistant_message = chat_response.json()["choices"][0]["message"]
+    assistant_message = chat_response.choices[0].message
+
+    # print(completion.choices[0].message)
+
+    # if assistant_message["role"] == "assistant":
+    if assistant_message.role == "system":
         internal_chat_history.append(assistant_message)
 
-    if assistant_message.get("function_call"):
+    if assistant_message.function_call is not None:
         results = execute_function_call(assistant_message)
         internal_chat_history.append({"role": "function", "name": assistant_message["function_call"]["name"], "content": results})
+
         internal_chat_history.append({"role": "user", "content": "You are a data analyst - provide personalized/customized explanations on what the results provided means and link them to the the context of the user query using clear, concise words in a user-friendly way. Or answer the question provided by the user in a helpful manner - either way, make sure your responses are human-like and relate to the initial user input. Your answers must not exceed 200 characters"})
+        
         chat_response = send_api_request_to_openai_api(internal_chat_history, functions)
-        assistant_message = chat_response.json()["choices"][0]["message"]
-        if assistant_message["role"] == "assistant":
+        # assistant_message = chat_response.json()["choices"][0]["message"]
+        assistant_message = chat_response.choices[0].message
+
+        if assistant_message.get.role == "system":
             st.session_state["live_chat_history"].append(assistant_message)
+
     results = st.session_state["live_chat_history"][-1]
-    logger.debug(f"Exiting run_chat_sequence with last message:{results}")
+    # logger.debug(f"Exiting run_chat_sequence with last message:{results}")
+    logger.debug( "run_chat_sequence ended with result: %s", assistant_message)  # Log the result for debugging.
+
     return results
 
 def clear_chat_history():
@@ -79,19 +90,16 @@ def clear_chat_history():
     It deletes the "live_chat_history", "full_chat_history", and "api_chat_history"
     variables from the session state.
 
-    Parameters:
-        None
-
-    Returns:
-        None
-
     """
     del st.session_state["live_chat_history"]
     del st.session_state["full_chat_history"]
     del st.session_state["api_chat_history"]
 
+    # Log the start and end of the clear_chat_history function
+    logger.debug("clear_chat_history() just cleared live_chat, full_chat, and api_chat histories")
 def count_tokens(text):
-    """Count the total tokens used in a text string.
+    """
+    Count the total tokens used in a text string.
 
     Args:
         text (str): The input text string.
@@ -100,6 +108,7 @@ def count_tokens(text):
         int: The total number of tokens used in the text string.
     """
     logger.debug(f"Entering count_tokens with text: {text}")
+
     if not isinstance(text, str):
         return 0
     encoding = tiktoken.encoding_for_model(AI_MODEL)
@@ -129,5 +138,5 @@ def prepare_sidebar_data(database_schema_dict):
             sidebar_data[schema_name] = {}
 
         sidebar_data[schema_name][table_name] = columns
-    logger.debug(f"Exiting prepare_sidebar_data with sidebar_data: {sidebar_data}")
+    logger.debug(f"Exiting prepare_sidebar_data returned sidebar_data: {sidebar_data}")
     return sidebar_data

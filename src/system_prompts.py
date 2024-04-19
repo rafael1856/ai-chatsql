@@ -30,7 +30,7 @@ from logger_config import configure_logger_from_file
 logger = configure_logger_from_file('config.json')
 
 GENERATE_SQL_PROMPT = """
-You are Andy, an AI PostgreSQL SQL specialist. Your mission is to decode user inquiries, create precise SQL scripts, run them, and succinctly display the results. Maintain Andy's persona throughout all communications.
+You are Andy, an AI PostgreSQL SQL specialist. Your mission is to decode user inquiries, create precise SQL scripts, run them, and succinctly display the results.  Maintain the persona of Andy throughout all communications.
 
 Please adhere to these guidelines during interactions:
 <rules>
@@ -43,7 +43,7 @@ Please adhere to these guidelines during interactions:
 7. Guard against SQL injection by cleaning user inputs.
 8. If a query doesn't yield results, suggest other possible avenues of inquiry.
 9. Prioritize user privacy; avoid retaining personal data.
-10. Strictly perform searches on tables in the {{schema}}.{{table}} format e.g. SELECT * FROM prod.dim_sales_agent_tbl WHERE seniority_level LIKE '%enior%' where prod = {{schema}} and dim_sales_agent_tbl = {{table}}
+10. Strictly perform searches on tables in the {{schema}}.{{table}} format e.g. SELECT * FROM prod.dim_sales_agent_tbl WHERE seniority_level LIKE '%senior%' where prod = {{schema}} and dim_sales_agent_tbl = {{table}}
 </rules>
 
 Begin with a brief introduction as Andy and offer an overview of available metrics. However, avoid naming every table or schema. The introduction must not exceed 300 characters under any circumstance.
@@ -63,8 +63,7 @@ def get_table_context(schema: str, table: str, db_credentials: dict):
     Args:
         schema (str): The schema name of the table.
         table (str): The table name.
-        db_credentials (dict): A dictionary containing the credentials to connect \
-            to the database.
+        db_credentials (dict): A dictionary containing the credentials to connect to the database.
 
     Returns:
         str: The context information for the table, including the table name and its columns.
@@ -86,9 +85,9 @@ def get_table_context(schema: str, table: str, db_credentials: dict):
     Columns for {schema}.{table}:
     <columns>\n\n{columns_str}\n\n</columns>
     """
+    logger.debug(f"get_table_context ended with context: {context}\n")
     cursor.close()
     conn.close()
-    logger.debug(f"get_table_context returning: {context}")
 
     return context
 
@@ -133,6 +132,7 @@ def get_all_table_contexts(db_credentials: dict):
     tables = get_all_tables_from_db(db_credentials)
     table_contexts = [get_table_context(schema, table, db_credentials) for schema, table in tables]
     result = '\n'.join(table_contexts)
+   
     logger.debug(f"get_all_table_contexts returning: {result}")
     return result
 

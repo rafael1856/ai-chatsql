@@ -36,77 +36,104 @@ Exceptions:
 #
 
 import json
-import requests
+from openai import OpenAI, ChatCompletion
+from config import LM_STUDIO_API_KEY, AI_MODEL
+# import requests
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from database_functions import ask_postgres_database, postgres_connection
 from logger_config import configure_logger_from_file
-from config import OPENAI_API_KEY, AI_MODEL
+# from config import OPENAI_API_KEY, AI_MODEL
 
 # Configure the logger based on the parameter file
 logger = configure_logger_from_file('config.json')
+# Initialize the OpenAI client with the local server URL and API key
+
+
+
+# openai = OpenAI(base_url="http://localhost:9193/v1", api_key=LM_STUDIO_API_KEY)
+client = OpenAI(base_url="http://localhost:9193/v1", api_key=LM_STUDIO_API_KEY)
+
+
 
 @retry(wait=wait_random_exponential(min=1, max=40), stop=stop_after_attempt(3))
 
 
-def send_api_request_to_openai_api(messages, functions=None, function_call=None, model=AI_MODEL, openai_api_key=OPENAI_API_KEY):
+def send_api_request_to_openai_api(messages, functions=None, function_call=None, model=AI_MODEL, openai_api_key=LM_STUDIO_API_KEY):
     """
-    Send the API request to the OpenAI API via Chat Completions endpoint.
+    Send the API request to the LMStudio API via Chat Completions endpoint.
+    # Function prepares request_data object with all parameters needed for the API request.
+    # Parameters include the model, messages, functions, and function_call parameters.
 
     Args:
         messages (list): A list of message objects containing 'role' and 'content' keys.
         functions (list, optional): A list of function objects. Defaults to None.
         function_call (dict, optional): A dictionary representing the function call. Defaults to None.
         model (str, optional): The model to use for the API request. Defaults to AI_MODEL.
-        openai_api_key (str, optional): The API key for the OpenAI API. Defaults to OPENAI_API_KEY.
+        # openai_api_key (str, optional): The API key for the OpenAI API. Defaults to OPENAI_API_KEY.
 
-    Returns:
-        requests.Response: The response object from the API request.
-
-    Raises:
-        ConnectionError: If there is a failure to connect to the OpenAI API.
+    Returns: dict: The response object from the API request.
+    Raises:  ConnectionError: If there is a failure to connect to the LMStudio API.
     """
     logger.debug(f"Entering send_api_request_to_openai_api with messages: {messages}, functions: {functions}, \
                  function_call: {function_call}, model: {model}, openai_api_key: {openai_api_key}")
 
     try:
-        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
-        json_data = {"model": model, "messages": messages}
-        logger.debug(f"model: {model}\n")
-        logger.debug(f"messages: {messages}\n")
-        if functions:
-            json_data.update({"functions": functions})
-        if function_call:
-            json_data.update({"function_call": function_call})
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, \
-                                 json=json_data, timeout=60)
-        response.raise_for_status()
-        logger.debug(f"response: {response}\n")
+        # Prepare the request_data object with all parameters needed for the API request
+        # The function is called with the model, messages, functions, and function_call parameters
+        request_data = {
+            "model": model,
+            "messages": messages, 
+            #"functions": functions,            # RSL added comment to clarity structur of request_data.
+            #"function_call": function_call     
+        }
+        if functions: 
+            request_data.update({"functions": functions})
+        if function_call: 
+            request_data.update({"function_call": function_call})
+
+        print(f"Actual request_data: {request_data} sent to LMStudio API \n")
+        
+        # Send the request using the OpenAI client
+
+        # response = openai.ChatCompletion.create(**request_data)
+        response = client.chat.completions.create(**request_data)
+
+
+#         completion = client.chat.completions.create(
+#   model="NousResearch/Hermes-2-Pro-Mistral-7B-GGUF/Hermes-2-Pro-Mistral-7B.Q4_0.gguf",
+#   messages=[
+#     {"role": "system", "content": "Always answer in rhymes."},
+#     {"role": "user", "content": "Introduce yourself."}
+#   ],
+#   temperature=0.7,
+# )
+
+        
+        print(f"Response: {response} received from LMStudio API \n")
+        logger.debug(f"Response: {response} received from LMStudio API")
+        
         return response
-    except requests.RequestException as error:
-        raise ConnectionError(f"Failed to connect to OpenAI API due to: {error}") from error
+
+    except Exception as e:
+        print(f"Error in send_api_request_to_openai_api: {e}")
+        raise ConnectionError(f"Failed to connect to LMStudio API due to: {e}")
 
 def execute_function_call(message):
     """
-    Run the function call provided by OpenAI's API response.
-
-    Args:
-        message (dict): The API response message containing the function call details.
-
-    Returns:
-        str: The results of the function call.
-
+    Run the function call provided by LMStudio's API response.
+    Args:  message (dict): The API response message containing the function call details.
+    Returns:  str: The results of the function call.
     Raises:
         None
-
     """
     logger.debug(f"Entering execute_function_call with message: {message}")
     if message["function_call"]["name"] == "ask_postgres_database":
         query = json.loads(message["function_call"]["arguments"])["query"]
-        # print(f"SQL query: {query} \n")
-        logger.debug(f"SQL query: {query} \n")
+        print(f"SQL query: {query} \n")     
+        # TODO: These SQL statments should be saved for reuse.
         results = ask_postgres_database(postgres_connection, query)
-        # print(f"Results A: {results} \n")
-        logger.debug(f"Results A: {results} \n")
+        print(f"Results A: {results} \n")   # TODO: These query results should be saved in a report.
     else:
         results = f"Error: function {message['function_call']['name']} does not exist"
+        logger.debug(f"Entering execute_function_callreturned results: {results}")
     return results

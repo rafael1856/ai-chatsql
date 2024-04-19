@@ -21,12 +21,15 @@ Imports:
 import os
 import sys
 import streamlit as st
+from openai import OpenAI
+import markdown
 from config import db_credentials, MAX_TOKENS_ALLOWED, MAX_MESSAGES_TO_OPENAI, TOKEN_BUFFER
 from system_prompts import get_final_system_prompt
 from chat_functions import run_chat_sequence, clear_chat_history, count_tokens, prepare_sidebar_data
 from database_functions import database_schema_dict
 from function_calling_spec import functions
 from helper_functions import  save_conversation
+from datetime import datetime
 from logger_config import configure_logger_from_file
 
 # Configure the logger based on the parameter file
@@ -90,6 +93,9 @@ if __name__ == "__main__":
         save_conversation(st.session_state["full_chat_history"])
         clear_chat_history()
 
+    st.markdown("-----------------------")
+    st.sidebar.text(f"database_schema_dict: {database_schema_dict}")
+
     st.title("AI chat with a database")
 
     if "full_chat_history" not in st.session_state:
@@ -130,5 +136,8 @@ if __name__ == "__main__":
         st.progress(progress)
         st.write(f"Tokens Used: {current_tokens}/{MAX_TOKENS_ALLOWED}")
         if current_tokens > MAX_TOKENS_ALLOWED:
-            st.warning("Note: Due to character limits, some older messages might not be considered \
-                       in ongoing conversations with the AI.")
+            st.warning("Note: Due to character limits, older messages might not be considered in ongoing AI conversations.")
+            st.warning("Please clear the conversation history to start fresh.")
+            st.warning("You can save the conversation before clearing it.")
+            st.warning("Conversation will be saved as 'conversation.md' in current folder.")
+            st.warning("Please note that the conversation history will be cleared after saving.")
