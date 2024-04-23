@@ -15,6 +15,8 @@ dependencies:
   - tiktoken
   - datetime
   - openai
+  - transformers
+  - json
 
   # Packages from import_from_set_without_dot
   - tenacity

@@ -36,6 +36,7 @@ Exceptions:
 #
 
 import json
+# import openai
 from openai import OpenAI, ChatCompletion
 from config import LM_STUDIO_API_KEY, AI_MODEL
 # import requests
@@ -48,15 +49,10 @@ from logger_config import configure_logger_from_file
 logger = configure_logger_from_file('config.json')
 # Initialize the OpenAI client with the local server URL and API key
 
-
-
 # openai = OpenAI(base_url="http://localhost:9193/v1", api_key=LM_STUDIO_API_KEY)
 client = OpenAI(base_url="http://localhost:9193/v1", api_key=LM_STUDIO_API_KEY)
 
-
-
 @retry(wait=wait_random_exponential(min=1, max=40), stop=stop_after_attempt(3))
-
 
 def send_api_request_to_openai_api(messages, functions=None, function_call=None, model=AI_MODEL, openai_api_key=LM_STUDIO_API_KEY):
     """
@@ -83,36 +79,54 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
         request_data = {
             "model": model,
             "messages": messages, 
-            #"functions": functions,            # RSL added comment to clarity structur of request_data.
-            #"function_call": function_call     
+            # messages=history,
+            # temperature : 0.7,
+            # stream : True,
+            # #"functions": functions,            # RSL added comment to clarity structur of request_data.
+            # #"function_call": function_call 
         }
         if functions: 
             request_data.update({"functions": functions})
         if function_call: 
             request_data.update({"function_call": function_call})
 
-        print(f"Actual request_data: {request_data} sent to LMStudio API \n")
+        logger.info(f"Actual request_data: {request_data} sent to LMStudio API \n")
         
         # Send the request using the OpenAI client
 
-        # response = openai.ChatCompletion.create(**request_data)
         response = client.chat.completions.create(**request_data)
 
+        # LM-Studio API call using OpenAI client
+        #   completion = client.chat.completions.create(
+        #   model="NousResearch/Hermes-2-Pro-Mistral-7B-GGUF/Hermes-2-Pro-Mistral-7B.Q4_0.gguf",
+        #   messages=[
+        #     {"role": "system", "content": "Always answer in rhymes."},
+        #     {"role": "user", "content": "Introduce yourself."}
+        #   ],
+        #   temperature=0.7,
+        # )
 
-#         completion = client.chat.completions.create(
-#   model="NousResearch/Hermes-2-Pro-Mistral-7B-GGUF/Hermes-2-Pro-Mistral-7B.Q4_0.gguf",
-#   messages=[
-#     {"role": "system", "content": "Always answer in rhymes."},
-#     {"role": "user", "content": "Introduce yourself."}
-#   ],
-#   temperature=0.7,
-# )
+
+        # looking for token counting
+        all_tokens = response.usage.json()
+        print(f"all_tokens used: {all_tokens} \n")
+        
+        all_tokens = json.loads(response.usage)
+
+        # Accessing the values for each key
+        prompt_tokens = all_tokens["usage"]["prompt_tokens"]
+        completion_tokens = all_tokens["usage"]["completion_tokens"]
+        total_tokens = all_tokens["usage"]["total_tokens"]
+
+
+        # Printing the values
+        print(f"Prompt Tokens: {prompt_tokens}")
+        print(f"Completion Tokens: {completion_tokens}")
+        print(f"Total Tokens: {total_tokens}")
 
         
-        print(f"Response: {response} received from LMStudio API \n")
-        logger.debug(f"Response: {response} received from LMStudio API")
-        
-        return response
+        logger.debug(f"\n\n Response: {response.choices[0].message} received from LMStudio API")
+        return response.choices[0].message
 
     except Exception as e:
         print(f"Error in send_api_request_to_openai_api: {e}")
@@ -130,9 +144,13 @@ def execute_function_call(message):
     if message["function_call"]["name"] == "ask_postgres_database":
         query = json.loads(message["function_call"]["arguments"])["query"]
         print(f"SQL query: {query} \n")     
+        logger.info(f"SQL query: {query}")
         # TODO: These SQL statments should be saved for reuse.
+
         results = ask_postgres_database(postgres_connection, query)
-        print(f"Results A: {results} \n")   # TODO: These query results should be saved in a report.
+        print(f"Results A: {results} \n")   
+        logger.info(f"Results A: {results}")
+        # TODO: These query results should be saved in a report.
     else:
         results = f"Error: function {message['function_call']['name']} does not exist"
         logger.debug(f"Entering execute_function_callreturned results: {results}")

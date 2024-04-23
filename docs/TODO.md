@@ -7,4 +7,4 @@
 6. Refactor bugs, security, error handle
 7. Extend the code to be able to use different models
 8. Implement real time data incoming - timescale
-9.  Develop a AI report for the new discover from the real time data source
+9. Develop a AI report for the new discover from the real time data source

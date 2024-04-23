@@ -21,8 +21,9 @@ Imports:
 import os
 import sys
 import streamlit as st
-from openai import OpenAI
-import markdown
+# import openai
+# from openai import OpenAI
+# import markdown
 from config import db_credentials, MAX_TOKENS_ALLOWED, MAX_MESSAGES_TO_OPENAI, TOKEN_BUFFER
 from system_prompts import get_final_system_prompt
 from chat_functions import run_chat_sequence, clear_chat_history, count_tokens, prepare_sidebar_data

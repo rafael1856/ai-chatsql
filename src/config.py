@@ -41,7 +41,8 @@ db_credentials = {
 # AI_MODEL        =   'gpt-4'
 
 LM_STUDIO_API_KEY = "lm-studio"
-AI_MODEL = 'NousResearch/Hermes-2-Pro-Mistral-7B-GGUF/Hermes-2-Pro-Mistral-7B.Q4_0.gguf'
+# AI_MODEL = 'NousResearch/Hermes-2-Pro-Mistral-7B-GGUF/Hermes-2-Pro-Mistral-7B.Q4_0.gguf'
+AI_MODEL = 'TheBloke/Llama-2-7B-Chat-GGUF/llama-2-7b-chat.Q2_K.gguf'
 
 # Max number of tokens permitted within a conversation exchange via OpenAI API
 MAX_TOKENS_ALLOWED      =   3000

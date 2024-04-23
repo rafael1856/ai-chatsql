@@ -25,11 +25,14 @@ message does not have a 'role' key, the function raises a KeyError.
 
 # Rest of the module code
 
-import tiktoken
+# import tiktoken
 import streamlit as st
 from config import AI_MODEL
 from api_functions import send_api_request_to_openai_api, execute_function_call
 from logger_config import configure_logger_from_file
+import json
+# from transformers import AutoTokenizer
+
 
 # Configure the logger based on the parameter file
 logger = configure_logger_from_file('config.json')
@@ -44,6 +47,7 @@ def run_chat_sequence(messages, functions):
     Raises: KeyError: If the assistant message does not have a 'role' key.
     """
     logger.debug("run_chat_sequence started with messages: %s and functions: %s", messages, functions)
+    
     if "live_chat_history" not in st.session_state:
         st.session_state["live_chat_history"] = [{"role": "assistant", "content": "Hello! I'm Andy, how can I assist you?"}]
         # st.session_state["live_chat_history"] = []
@@ -51,36 +55,27 @@ def run_chat_sequence(messages, functions):
     internal_chat_history = st.session_state["live_chat_history"].copy()
 
     chat_response = send_api_request_to_openai_api(messages, functions)
+    assistant_message = chat_response.json()
+    assistant_message_dict = json.loads(assistant_message)
+    # Access the "content" value
+    content_value = assistant_message_dict["content"]
 
-        # # response = openai.ChatCompletion.create(**request_data)
-        # response = client.chat.completions.create(**request_data)
+    if assistant_message_dict["role"] == "assistant":
+        internal_chat_history.append(assistant_message_dict)
 
-    # assistant_message = chat_response.json()["choices"][0]["message"]
-    assistant_message = chat_response.choices[0].message
-
-    # print(completion.choices[0].message)
-
-    # if assistant_message["role"] == "assistant":
-    if assistant_message.role == "system":
-        internal_chat_history.append(assistant_message)
-
-    if assistant_message.function_call is not None:
-        results = execute_function_call(assistant_message)
-        internal_chat_history.append({"role": "function", "name": assistant_message["function_call"]["name"], "content": results})
+    if assistant_message_dict.get("function_call"):
+        results = execute_function_call(assistant_message_dict)
+        internal_chat_history.append({"role": "function", "name": assistant_message_dict["function_call"]["name"], "content": results})
 
         internal_chat_history.append({"role": "user", "content": "You are a data analyst - provide personalized/customized explanations on what the results provided means and link them to the the context of the user query using clear, concise words in a user-friendly way. Or answer the question provided by the user in a helpful manner - either way, make sure your responses are human-like and relate to the initial user input. Your answers must not exceed 200 characters"})
         
         chat_response = send_api_request_to_openai_api(internal_chat_history, functions)
-        # assistant_message = chat_response.json()["choices"][0]["message"]
-        assistant_message = chat_response.choices[0].message
-
-        if assistant_message.get.role == "system":
-            st.session_state["live_chat_history"].append(assistant_message)
+        assistant_message_dict = chat_response.json()["choices"][0]["message"]
+        if assistant_message_dict["role"] == "assistant":
+            st.session_state["live_chat_history"].append(assistant_message_dict)
 
     results = st.session_state["live_chat_history"][-1]
-    # logger.debug(f"Exiting run_chat_sequence with last message:{results}")
-    logger.debug( "run_chat_sequence ended with result: %s", assistant_message)  # Log the result for debugging.
-
+    logger.debug(f"Exiting run_chat_sequence with last message:{results}")
     return results
 
 def clear_chat_history():
@@ -97,13 +92,13 @@ def clear_chat_history():
 
     # Log the start and end of the clear_chat_history function
     logger.debug("clear_chat_history() just cleared live_chat, full_chat, and api_chat histories")
+
+
 def count_tokens(text):
     """
     Count the total tokens used in a text string.
-
     Args:
         text (str): The input text string.
-
     Returns:
         int: The total number of tokens used in the text string.
     """
@@ -111,21 +106,28 @@ def count_tokens(text):
 
     if not isinstance(text, str):
         return 0
-    encoding = tiktoken.encoding_for_model(AI_MODEL)
-    total_tokens_in_text_string = len(encoding.encode(text))
+    
+   # Split the text into words (tokens)
+    tokens = text.split()
+
+    # Count the tokens
+    total_tokens_in_text_string = len(tokens)
     logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
     return total_tokens_in_text_string
+
+    # This only works with OpenAI GPT-3 models
+    # encoding = tiktoken.encoding_for_model(AI_MODEL)
+    # total_tokens_in_text_string = len(encoding.encode(text))
+    # logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
+    # return total_tokens_in_text_string
 
 def prepare_sidebar_data(database_schema_dict):
     """ 
     Prepare sidebar data for visualizing the database schema objects.
-
     Args:
         database_schema_dict (dict): A dictionary containing the database schema information.
-
     Returns:
         dict: A dictionary representing the sidebar data, organized by schema and table names.
-
     """
     logger.debug(f"Entering prepare_sidebar_data with database_schema_dict: {database_schema_dict}")
     sidebar_data = {}
