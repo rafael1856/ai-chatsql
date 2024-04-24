@@ -46,7 +46,7 @@ def run_chat_sequence(messages, functions):
     Returns: dict: The last message in the chat history.
     Raises: KeyError: If the assistant message does not have a 'role' key.
     """
-    logger.debug("run_chat_sequence started with messages: %s and functions: %s", messages, functions)
+    logger.debug("At run_chat_sequence \n\n paramter messages: %s \n\n and parameter functions: %s", messages, functions)
     
     if "live_chat_history" not in st.session_state:
         st.session_state["live_chat_history"] = [{"role": "assistant", "content": "Hello! I'm Andy, how can I assist you?"}]
@@ -93,33 +93,46 @@ def clear_chat_history():
     # Log the start and end of the clear_chat_history function
     logger.debug("clear_chat_history() just cleared live_chat, full_chat, and api_chat histories")
 
+def count_tokens(response):
+    # looking for token counting
+    all_tokens = response.usage.json()
+    # print(f"all_tokens used: {all_tokens} \n")
 
-def count_tokens(text):
-    """
-    Count the total tokens used in a text string.
-    Args:
-        text (str): The input text string.
-    Returns:
-        int: The total number of tokens used in the text string.
-    """
-    logger.debug(f"Entering count_tokens with text: {text}")
+    all_tokens_dict = json.loads(all_tokens)
+    # print(f"all_tokens_dict: {all_tokens_dict} \n")
 
-    if not isinstance(text, str):
-        return 0
+    # Accessing the values for each key
+    prompt_tokens = all_tokens_dict["prompt_tokens"]
+    completion_tokens = all_tokens_dict["completion_tokens"]
+    total_tokens = all_tokens_dict["total_tokens"]
+    return total_tokens
+
+# def count_tokens(text):
+#     """
+#     Count the total tokens used in a text string.
+#     Args:
+#         text (str): The input text string.
+#     Returns:
+#         int: The total number of tokens used in the text string.
+#     """
+#     logger.debug(f"Entering count_tokens with text: {text}")
+
+#     if not isinstance(text, str):
+#         return 0
     
-   # Split the text into words (tokens)
-    tokens = text.split()
+#    # Split the text into words (tokens)
+#     tokens = text.split()
 
-    # Count the tokens
-    total_tokens_in_text_string = len(tokens)
-    logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
-    return total_tokens_in_text_string
+#     # Count the tokens
+#     total_tokens_in_text_string = len(tokens)
+#     logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
+#     return total_tokens_in_text_string
 
-    # This only works with OpenAI GPT-3 models
-    # encoding = tiktoken.encoding_for_model(AI_MODEL)
-    # total_tokens_in_text_string = len(encoding.encode(text))
-    # logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
-    # return total_tokens_in_text_string
+#     # This only works with OpenAI GPT-3 models
+#     # encoding = tiktoken.encoding_for_model(AI_MODEL)
+#     # total_tokens_in_text_string = len(encoding.encode(text))
+#     # logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")
+#     # return total_tokens_in_text_string
 
 def prepare_sidebar_data(database_schema_dict):
     """ 

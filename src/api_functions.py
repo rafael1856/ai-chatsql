@@ -106,25 +106,6 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
         #   temperature=0.7,
         # )
 
-
-        # looking for token counting
-        all_tokens = response.usage.json()
-        print(f"all_tokens used: {all_tokens} \n")
-        
-        all_tokens = json.loads(response.usage)
-
-        # Accessing the values for each key
-        prompt_tokens = all_tokens["usage"]["prompt_tokens"]
-        completion_tokens = all_tokens["usage"]["completion_tokens"]
-        total_tokens = all_tokens["usage"]["total_tokens"]
-
-
-        # Printing the values
-        print(f"Prompt Tokens: {prompt_tokens}")
-        print(f"Completion Tokens: {completion_tokens}")
-        print(f"Total Tokens: {total_tokens}")
-
-        
         logger.debug(f"\n\n Response: {response.choices[0].message} received from LMStudio API")
         return response.choices[0].message
 

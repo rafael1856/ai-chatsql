@@ -21,7 +21,8 @@ Imports:
 import os
 import sys
 import streamlit as st
-# import openai
+
+import openai
 # from openai import OpenAI
 # import markdown
 from config import db_credentials, MAX_TOKENS_ALLOWED, MAX_MESSAGES_TO_OPENAI, TOKEN_BUFFER
