@@ -35,6 +35,7 @@ Exceptions:
 # Inspect the Exception: Modify the send_api_request_to_openai_api function to print or log the exception that caused the retry mechanism to fail. This can provide more insight into what's going wrong.
 #
 
+from openai import OpenAI
 import json
 import requests
 from tenacity import retry, wait_random_exponential, stop_after_attempt
@@ -48,7 +49,7 @@ logger = configure_logger_from_file('config.json')
 @retry(wait=wait_random_exponential(min=1, max=40), stop=stop_after_attempt(3))
 
 
-def send_api_request_to_openai_api(messages, functions=None, function_call=None, model=AI_MODEL, openai_api_key=OPENAI_API_KEY):
+def send_api_request_to_openai_api(messages1, functions=None, function_call=None, model=AI_MODEL, openai_api_key=OPENAI_API_KEY):
     """
     Send the API request to the OpenAI API via Chat Completions endpoint.
 
@@ -65,23 +66,45 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
     Raises:
         ConnectionError: If there is a failure to connect to the OpenAI API.
     """
-    logger.debug(f"Entering send_api_request_to_openai_api with messages: {messages}, functions: {functions}, \
+    logger.debug(f"Entering send_api_request_to_openai_api with messages: {messages1}, functions: {functions}, \
                  function_call: {function_call}, model: {model}, openai_api_key: {openai_api_key}")
 
     try:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
-        json_data = {"model": model, "messages": messages}
+        json_data = {"model": model, "messages": messages1}
+
         logger.debug(f"model: {model}\n")
-        logger.debug(f"messages: {messages}\n")
+        print(f"messages: {messages1}\n")
+
+# messages: [{'role': 'system', 'content': '\nYou are Andy, an AI PostgreSQL SQL specialist. Your mission is to decode user inquiries, create precise SQL scripts, run them, and succinctly display the results. Maintain Andy\'s persona throughout all communications.\n\nPlease adhere to these guidelines during interactions:\n<rules>\n1. Strictly use wildcards like "%keyword%" and the \'LIKE\' clause when trying to find text that might not match exactly.\n2. Ensure SQL variables don\'t start with numbers.\n3. Work with the given tables and columns, making no baseless assumptions.\n4. Generally, limit the amount of results to 10, unless otherwise noted.\n5. Present SQL queries in a neat markdown format, like ```sql code```.\n6. Aim to offer just a single SQL script in one response.\n7. Guard against SQL injection by cleaning user inputs.\n8. If a query doesn\'t yield results, suggest other possible avenues of inquiry.\n9. Prioritize user privacy; avoid retaining personal data.\n10. Strictly perform searches on tables in the {{schema}}.{{table}} format e.g. SELECT * FROM prod.dim_sales_agent_tbl WHERE seniority_level LIKE \'%enior%\' where prod = {{schema}} and dim_sales_agent_tbl = {{table}}\n</rules>\n\nBegin with a brief introduction as Andy and offer an overview of available metrics. However, avoid naming every table or schema. The introduction must not exceed 300 characters under any circumstance.\n\nFor each SQL output, include a brief rationale, display the outcome in the chat, and provide an explanation in context to the user\'s original request. Always format SQL as {{database}}.{{schema}}.{{table}}.\n\nBefore presenting, confirm the validity of SQL scripts and dataframes. Assess if a user\'s query truly needs a database response. If not, guide them as necessary.\n\n'}]
+
+
         if functions:
             json_data.update({"functions": functions})
         if function_call:
             json_data.update({"function_call": function_call})
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, \
-                                 json=json_data, timeout=60)
-        response.raise_for_status()
-        logger.debug(f"response: {response}\n")
+
+
+        client = OpenAI(base_url="http://localhost:9193/v1", api_key="lm-studio")
+
+        completion = client.chat.completions.create(
+        model="TheBloke/Mistral-7B-Instruct-v0.1-GGUF/mistral-7b-instruct-v0.1.Q4_K_S.gguf",
+        messages=[
+            {"role": "system", "content": messages1[0]["content"]},
+            {"role": "user", "content": "Introduce yourself."}
+        ],
+        temperature=0.7,
+        )
+
+        # print(completion.choices[0].message)
+        response = completion #.choices[0].message
+        # ["choices"][0]["message"]
+       
+        # logger.debug(f"response: {response}\n")
+        print(f"\n\n response: {response}\n")
         return response
+    
+
     except requests.RequestException as error:
         raise ConnectionError(f"Failed to connect to OpenAI API due to: {error}") from error
 

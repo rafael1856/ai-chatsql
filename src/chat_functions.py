@@ -56,20 +56,30 @@ def run_chat_sequence(messages, functions):
     internal_chat_history = st.session_state["live_chat_history"].copy()
 
     chat_response = send_api_request_to_openai_api(messages, functions)
-    assistant_message = chat_response.json()["choices"][0]["message"]
-    if assistant_message["role"] == "assistant":
-        internal_chat_history.append(assistant_message)
+    # assistant_message = chat_response.json()["choices"][0]["message"]
+    assistant_message = chat_response.choices[0].message
 
-    if assistant_message.get("function_call"):
-        results = execute_function_call(assistant_message)
-        internal_chat_history.append({"role": "function", "name": assistant_message["function_call"]["name"], "content": results})
-        internal_chat_history.append({"role": "user", "content": "You are a data analyst - provide personalized/customized explanations on what the results provided means and link them to the the context of the user query using clear, concise words in a user-friendly way. Or answer the question provided by the user in a helpful manner - either way, make sure your responses are human-like and relate to the initial user input. Your answers must not exceed 200 characters"})
-        chat_response = send_api_request_to_openai_api(internal_chat_history, functions)
-        assistant_message = chat_response.json()["choices"][0]["message"]
-        if assistant_message["role"] == "assistant":
-            st.session_state["live_chat_history"].append(assistant_message)
+# "message": {
+#         "role": "assistant",
+#         "content": " Hello! I'm Andy, an AI PostgreSQL SQL specialist. My purpose is to assist you with creating precise SQL scripts and running them. To get started, let me provide you with an overview of the available metrics in our database. Please find below a list:\n\n* Sales Volume by Product Category\n* Total Sales by Agent\n* Average Sale Price by Region\n* Customer Count by Age Group\n* Top 10 Customers by Spending\n\nPlease let me know which metric you would like to explore further."
+#       },
+
+    internal_chat_history.append({"role": assistant_message.role, "content": assistant_message.content})
+
+        # # TODO remove this
+    # internal_chat_history.append({"role": "user", "content": "You are a data analyst - provide personalized/customized explanations on what the results provided means and link them to the the context of the user query using clear, concise words in a user-friendly way. Or answer the question provided by the user in a helpful manner - either way, make sure your responses are human-like and relate to the initial user input. Your answers must not exceed 200 characters"})
+
+    # chat_response = send_api_request_to_openai_api(internal_chat_history, functions)
+    # assistant_message = chat_response.choices[0]["message"]
+
+    if assistant_message.role == "assistant":
+        st.session_state["live_chat_history"].append({"role": assistant_message.role, "content": assistant_message.content})
+
     results = st.session_state["live_chat_history"][-1]
-    logger.debug(f"Exiting run_chat_sequence with last message:{results}")
+
+    logger.debug(f"Exiting run_chat_sequence with last message:  {results}")
+    print(f"Exiting run_chat_sequence with last message:{results}")
+
     return results
 
 def clear_chat_history():

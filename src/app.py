@@ -124,11 +124,12 @@ if __name__ == "__main__":
 
             st.chat_message("assistant").write(new_message["content"])
 
+        # TODO recalulate token in base of the completion object
         # max_tokens = MAX_TOKENS_ALLOWED
-        current_tokens = sum(count_tokens(message["content"]) for message in st.session_state["full_chat_history"])
-        progress = min(1.0, max(0.0, current_tokens / MAX_TOKENS_ALLOWED))
-        st.progress(progress)
-        st.write(f"Tokens Used: {current_tokens}/{MAX_TOKENS_ALLOWED}")
-        if current_tokens > MAX_TOKENS_ALLOWED:
-            st.warning("Note: Due to character limits, some older messages might not be considered \
-                       in ongoing conversations with the AI.")
+        # current_tokens = sum(count_tokens(message["content"]) for message in st.session_state["full_chat_history"])
+        # progress = min(1.0, max(0.0, current_tokens / MAX_TOKENS_ALLOWED))
+        # st.progress(progress)
+        # st.write(f"Tokens Used: {current_tokens}/{MAX_TOKENS_ALLOWED}")
+        # if current_tokens > MAX_TOKENS_ALLOWED:
+        #     st.warning("Note: Due to character limits, some older messages might not be considered \
+        #                in ongoing conversations with the AI.")

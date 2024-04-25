@@ -36,9 +36,13 @@ db_credentials = {
 }
 
 # Set up OpenAI variables
-OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
-AI_MODEL        =   'gpt-3.5-turbo-16k'
+# OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
+# AI_MODEL        =   'gpt-3.5-turbo-16k'
 # AI_MODEL        =   'gpt-4'
+
+OPENAI_API_KEY  =   "lm-studio"
+AI_MODEL        =   "TheBloke/Mistral-7B-Instruct-v0.1-GGUF/mistral-7b-instruct-v0.1.Q4_K_S.gguf"
+
 
 # Max number of tokens permitted within a conversation exchange via OpenAI API
 MAX_TOKENS_ALLOWED      =   3000
