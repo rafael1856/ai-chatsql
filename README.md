@@ -38,7 +38,7 @@ This is an AI chatbot that is able to answer any question about the information 
 1. Clone this repository with 'git clone URL'
       
 2. Install PostgreSQL (only first time)
-   Read document about postgresql at ./docs folder
+   Read document about postgresql at 'docs' folder
 
 3. Add your database credentials in the user enviroment.
     In linux bash create a file 'env-vars' in the up-folder for app.
@@ -57,15 +57,27 @@ This is an AI chatbot that is able to answer any question about the information 
     ```
       then reload your .bashrc runnig source .bashrc (only first time)
 
+5. Setup conda enviroment
+    Linux
+        from bash terminal, in the app folder
+        run: source ./setup_conda
+    Windows
+        from powershell terminal, in the app folder
+        run: conda env create -f conda_config.yaml
+
+
 # Running the Chatbot 
-  - run: chmod 755 ./start.sh (it is was not executable)
-  ./start.sh
+    Linux
+     - run: chmod 755 ./start.sh (it is was not executable)
+     ./start.sh
+    Windows
+        streamlit run src/app.py
 
    The chatbot UI will open in your default web browser. 
 
 # How to use it
 
-* Ask questions - Post questions related to data stored in the database the chatbot is connected to
+* Ask questions related to data stored in the database the chatbot is connected to
 * Get answers - Enjoy the structured and dynamic answers the chatbot provides  
 * Save conversations - Preserve conversations into a markdown file for your future use 
 
