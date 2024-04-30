@@ -18,18 +18,23 @@ This is an AI chatbot that is able to answer any question about the information 
 │   └── ....
 ├── data
 │   └── employees.sql.gz
+├── logs
+│   └── app.log
 ├── docs
 │   └── postgresql-setup.md
 ├── LICENSE
 ├── README.md
 ├── start.sh
+├── start.bat
 └── utils
     ├── api_functions.py
     ├── chat_functions.py
     ├── config.py
+    ├── config.json
     ├── database_functions.py
     ├── function_calling_spec.py
     ├── helper_functions.py
+    ├── logger_config.py
     └── system_prompts.py
 ```
 
@@ -41,6 +46,7 @@ This is an AI chatbot that is able to answer any question about the information 
    Read document about postgresql at 'docs' folder
 
 3. Add your database credentials in the user enviroment.
+    
     In linux bash create a file 'env-vars' in the up-folder for app.
     This file should not be at the app folder for security reasons:
     ```
@@ -50,6 +56,10 @@ This is an AI chatbot that is able to answer any question about the information 
       export POSTGRES_HOST='localhost'
       export POSTGRES_PORT='5432'
     ```
+
+    In Windows, update your start.bat file with the corresponding values 
+    for your database.
+
 4. Add your OpenAI API key in the user enviroment
     in Linux bash, add to your .bashrc file:
     ```
@@ -57,23 +67,30 @@ This is an AI chatbot that is able to answer any question about the information 
     ```
       then reload your .bashrc runnig source .bashrc (only first time)
 
+    in Windows modify your the start.bat file:
+    ```
+      set OPENAI_API_KEY='your-api-key-value'
+    ```  
+
 5. Setup conda enviroment
     Linux
         from bash terminal, in the app folder
         run: source ./setup_conda
     Windows
-        from powershell terminal, in the app folder
+        from command terminal, in the app folder
         run: conda env create -f conda_config.yaml
 
 
-# Running the Chatbot 
-    Linux
-     - run: chmod 755 ./start.sh (it is was not executable)
-     ./start.sh
-    Windows
-        streamlit run src/app.py
+# Running the SqlChatbot 
+    First time will ask for authorization email to use streamlit. 
+    The app will be open in your default web browser.
 
-   The chatbot UI will open in your default web browser. 
+    Linux
+     - run: chmod 755 ./start.sh (if it was not executable)
+        ./start.sh
+   
+    Windows
+        start.bat
 
 # How to use it
 
