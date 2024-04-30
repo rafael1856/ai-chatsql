@@ -103,10 +103,10 @@ def execute_function_call(message):
     if message["function_call"]["name"] == "ask_postgres_database":
         query = json.loads(message["function_call"]["arguments"])["query"]
         # print(f"SQL query: {query} \n")
-        logger.debug(f"SQL query: {query} \n")
+        logger.info(f"SQL query: {query} \n")
         results = ask_postgres_database(postgres_connection, query)
         # print(f"Results A: {results} \n")
-        logger.debug(f"Results A: {results} \n")
+        logger.info(f"Results A: {results} \n")
     else:
         results = f"Error: function {message['function_call']['name']} does not exist"
     return results
