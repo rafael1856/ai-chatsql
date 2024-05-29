@@ -61,13 +61,13 @@ This is an AI chatbot that is able to answer any question about the information 
     for your database.
 
 4. Add your OpenAI API key in the user enviroment
-    in Linux bash, add to your .bashrc file:
+    Linux bash, add to your .bashrc file:
     ```
       export OPENAI_API_KEY='your-api-key-value'
     ```
       then reload your .bashrc runnig source .bashrc (only first time)
 
-    in Windows modify your the start.bat file:
+    Windows modify your the start.bat file:
     ```
       set OPENAI_API_KEY='your-api-key-value'
     ```  
@@ -79,18 +79,18 @@ This is an AI chatbot that is able to answer any question about the information 
     Windows
         from command terminal, in the app folder
         run: conda env create -f conda_config.yaml
-
+        run: activate chatsql
 
 # Running the SqlChatbot 
     First time will ask for authorization email to use streamlit. 
     The app will be open in your default web browser.
 
     Linux
-     - run: chmod 755 ./start.sh (if it was not executable)
+    - run: chmod 755 ./start.sh (if it was not executable)
         ./start.sh
    
     Windows
-        start.bat
+    - Be sure you have all setting updated on start.bat and run start.bat
 
 # How to use it
 

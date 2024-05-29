@@ -16,25 +16,6 @@ Exceptions:
 - ConnectionError: Raised when a request to the OpenAI API fails.
 """
 
-#
-#TODO: THIS IS THE REFACTORED VERSION OF THE ORIGINAL CODE THAT USED REQUESTS.GET() directly.
-#TODO: EXPLAIN THE CHANGES MADE AND WHY THEY WERE MADE.
-
-#TODO: use this Phind Debug information
-#The RetryError you're encountering indicates that the send_api_request_to_openai_api function, which is decorated
-#with a retry mechanism using tenacity, has failed to execute successfully after the specified number of retry attempts.
-#This could be due to several reasons, such as network issues, incorrect API credentials, or the API endpoint being unavailable.
-# Here are steps to troubleshoot and potentially resolve this issue:
-# Verify API Credentials and Endpoint: Ensure that the LM_STUDIO_API_KEY and the API endpoint URL (http://localhost:1234/v1) are correct. If you're running the LMStudio server locally, make sure it's up and running.
-#Check Network Connectivity: If the LMStudio server is running on a different machine or a container, ensure that your
-# machine can reach it. You can test this by pinging the server's IP address or using a tool like curl to make a
-#request to the API endpoint.
-#Review Retry Parameters: The retry mechanism is configured with wait_random_exponential(min=1, max=40) and
-#stop_after_attempt(3). This means it will wait a random amount of time between 1 and 40 seconds between retries
-# and will stop after 3 attempts. You might want to adjust these parameters based on your specific needs and environment.
-# Inspect the Exception: Modify the send_api_request_to_openai_api function to print or log the exception that caused the retry mechanism to fail. This can provide more insight into what's going wrong.
-#
-
 import json
 import requests
 from tenacity import retry, wait_random_exponential, stop_after_attempt
