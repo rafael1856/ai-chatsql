@@ -35,7 +35,8 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
 
     Args:
         messages (list): A list of message objects containing 'role' and 'content' keys.
-        functions (list, optional): A list of function objects. Defaults to None.
+        functions (list, optional):
+         A list of function objects. Defaults to None.
         function_call (dict, optional): A dictionary representing the function call. Defaults to None.
         model (str, optional): The model to use for the API request. Defaults to AI_MODEL.
         openai_api_key (str, optional): The API key for the OpenAI API. Defaults to OPENAI_API_KEY.
