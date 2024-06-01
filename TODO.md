@@ -12,9 +12,6 @@ Project Description
 - [ ] Generate plots and charts from the DB  
 - [ ] Add real time database updates  
 
-### In Progress
 
-
-### Done ✓
 
 
