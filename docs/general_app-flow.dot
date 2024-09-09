@@ -1,0 +1,31 @@
+digraph ApplicationFlow {
+    rankdir=TB;
+    node [shape=rectangle];
+    edge [arrowhead=vee];
+
+    start [label="Start"];
+    check_env_vars [label="check_env_vars()"];
+    check_conda_env [label="check_conda_env()"];
+    prepare_sidebar_data [label="prepare_sidebar_data(database_schema_dict)"];
+    run_chat_sequence [label="run_chat_sequence(messages, functions)"];
+    clear_chat_history [label="clear_chat_history()"];
+    count_tokens [label="count_tokens(text)"];
+    save_conversation [label="save_conversation(conversation_history)"];
+    send_api_request_to_openai_api [label="send_api_request_to_openai_api(messages)"];
+    execute_function_call [label="execute_function_call(message)"];
+    ask_postgres_database [label="ask_postgres_database(postgres_connection, query)"];
+    configure_logger_from_file [label="configure_logger_from_file(file_path)"];
+
+    start -> check_env_vars;
+    check_env_vars -> check_conda_env;
+    check_conda_env -> prepare_sidebar_data;
+    prepare_sidebar_data -> run_chat_sequence;
+    run_chat_sequence -> clear_chat_history;
+    clear_chat_history -> count_tokens;
+    count_tokens -> save_conversation;
+    save_conversation -> send_api_request_to_openai_api;
+    send_api_request_to_openai_api -> execute_function_call;
+    execute_function_call -> ask_postgres_database;
+    ask_postgres_database -> configure_logger_from_file;
+    configure_logger_from_file -> end [label="End"];
+}

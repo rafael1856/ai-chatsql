@@ -1,0 +1,20 @@
+FROM ubuntu:latest
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/New_York
+RUN echo "America/New_York" > /etc/timezone
+
+# folder in docker container used for the files copied
+WORKDIR /data
+
+# copy the files to WORKDIR
+COPY ./*.* ./
+
+EXPOSE 5432
+
+RUN /data/postgres-setup-docker.sh 
+
+
+
+
+

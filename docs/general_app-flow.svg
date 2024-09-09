@@ -1,0 +1,158 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="315pt" height="936pt" viewBox="0.00 0.00 314.80 935.80">
+<g id="graph0" class="graph" transform="translate(4,931.7999877929688) scale(1)" data-name="ApplicationFlow">
+
+<polygon fill="white" stroke="none" points="-4,4 -4,-931.8 310.8,-931.8 310.8,4 -4,4" style=""/>
+<!-- start -->
+<g id="node1" class="node" pointer-events="visible" data-name="start">
+
+<polygon fill="none" stroke="black" points="180.4,-927.8 126.4,-927.8 126.4,-891.8 180.4,-891.8 180.4,-927.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-905.6" font-family="Times,serif" font-size="14.00" style="">Start</text>
+</g>
+<!-- check_env_vars -->
+<g id="node2" class="node" pointer-events="visible" data-name="check_env_vars">
+
+<polygon fill="none" stroke="black" points="210.91,-854.8 95.9,-854.8 95.9,-818.8 210.91,-818.8 210.91,-854.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-832.6" font-family="Times,serif" font-size="14.00" style="">check_env_vars()</text>
+</g>
+<!-- start&#45;&gt;check_env_vars -->
+<g id="edge1" class="edge" data-name="start-&gt;check_env_vars">
+
+<path fill="none" stroke="black" d="M153.4,-891.61C153.4,-883.5 153.4,-873.64 153.4,-864.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-854.83 157.9,-864.83 153.4,-859.83 153.4,-864.83 153.4,-864.83 153.4,-864.83 153.4,-859.83 148.9,-864.83 153.4,-854.83 153.4,-854.83" style=""/>
+</g>
+<!-- check_conda_env -->
+<g id="node3" class="node" pointer-events="visible" data-name="check_conda_env">
+
+<polygon fill="none" stroke="black" points="216.01,-781.8 90.79,-781.8 90.79,-745.8 216.01,-745.8 216.01,-781.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-759.6" font-family="Times,serif" font-size="14.00" style="">check_conda_env()</text>
+</g>
+<!-- check_env_vars&#45;&gt;check_conda_env -->
+<g id="edge2" class="edge" data-name="check_env_vars-&gt;check_conda_env">
+
+<path fill="none" stroke="black" d="M153.4,-818.61C153.4,-810.5 153.4,-800.64 153.4,-791.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-781.83 157.9,-791.83 153.4,-786.83 153.4,-791.83 153.4,-791.83 153.4,-791.83 153.4,-786.83 148.9,-791.83 153.4,-781.83 153.4,-781.83" style=""/>
+</g>
+<!-- prepare_sidebar_data -->
+<g id="node4" class="node" pointer-events="visible" data-name="prepare_sidebar_data">
+
+<polygon fill="none" stroke="black" points="288.6,-708.8 18.2,-708.8 18.2,-672.8 288.6,-672.8 288.6,-708.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-686.6" font-family="Times,serif" font-size="14.00" style="">prepare_sidebar_data(database_schema_dict)</text>
+</g>
+<!-- check_conda_env&#45;&gt;prepare_sidebar_data -->
+<g id="edge3" class="edge" data-name="check_conda_env-&gt;prepare_sidebar_data">
+
+<path fill="none" stroke="black" d="M153.4,-745.61C153.4,-737.5 153.4,-727.64 153.4,-718.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-708.83 157.9,-718.83 153.4,-713.83 153.4,-718.83 153.4,-718.83 153.4,-718.83 153.4,-713.83 148.9,-718.83 153.4,-708.83 153.4,-708.83" style=""/>
+</g>
+<!-- run_chat_sequence -->
+<g id="node5" class="node" pointer-events="visible" data-name="run_chat_sequence">
+
+<polygon fill="none" stroke="black" points="275.49,-635.8 31.31,-635.8 31.31,-599.8 275.49,-599.8 275.49,-635.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-613.6" font-family="Times,serif" font-size="14.00" style="">run_chat_sequence(messages, functions)</text>
+</g>
+<!-- prepare_sidebar_data&#45;&gt;run_chat_sequence -->
+<g id="edge4" class="edge" data-name="prepare_sidebar_data-&gt;run_chat_sequence">
+
+<path fill="none" stroke="black" d="M153.4,-672.61C153.4,-664.5 153.4,-654.64 153.4,-645.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-635.83 157.9,-645.83 153.4,-640.83 153.4,-645.83 153.4,-645.83 153.4,-645.83 153.4,-640.83 148.9,-645.83 153.4,-635.83 153.4,-635.83" style=""/>
+</g>
+<!-- clear_chat_history -->
+<g id="node6" class="node" pointer-events="visible" data-name="clear_chat_history">
+
+<polygon fill="none" stroke="black" points="217.63,-562.8 89.18,-562.8 89.18,-526.8 217.63,-526.8 217.63,-562.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-540.6" font-family="Times,serif" font-size="14.00" style="">clear_chat_history()</text>
+</g>
+<!-- run_chat_sequence&#45;&gt;clear_chat_history -->
+<g id="edge5" class="edge" data-name="run_chat_sequence-&gt;clear_chat_history">
+
+<path fill="none" stroke="black" d="M153.4,-599.61C153.4,-591.5 153.4,-581.64 153.4,-572.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-562.83 157.9,-572.83 153.4,-567.83 153.4,-572.83 153.4,-572.83 153.4,-572.83 153.4,-567.83 148.9,-572.83 153.4,-562.83 153.4,-562.83" style=""/>
+</g>
+<!-- count_tokens -->
+<g id="node7" class="node" pointer-events="visible" data-name="count_tokens">
+
+<polygon fill="none" stroke="black" points="213.87,-489.8 92.93,-489.8 92.93,-453.8 213.87,-453.8 213.87,-489.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-467.6" font-family="Times,serif" font-size="14.00" style="">count_tokens(text)</text>
+</g>
+<!-- clear_chat_history&#45;&gt;count_tokens -->
+<g id="edge6" class="edge" data-name="clear_chat_history-&gt;count_tokens">
+
+<path fill="none" stroke="black" d="M153.4,-526.61C153.4,-518.5 153.4,-508.64 153.4,-499.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-489.83 157.9,-499.83 153.4,-494.83 153.4,-499.83 153.4,-499.83 153.4,-499.83 153.4,-494.83 148.9,-499.83 153.4,-489.83 153.4,-489.83" style=""/>
+</g>
+<!-- save_conversation -->
+<g id="node8" class="node" pointer-events="visible" data-name="save_conversation">
+
+<polygon fill="none" stroke="black" points="276.55,-416.8 30.25,-416.8 30.25,-380.8 276.55,-380.8 276.55,-416.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-394.6" font-family="Times,serif" font-size="14.00" style="">save_conversation(conversation_history)</text>
+</g>
+<!-- count_tokens&#45;&gt;save_conversation -->
+<g id="edge7" class="edge" data-name="count_tokens-&gt;save_conversation">
+
+<path fill="none" stroke="black" d="M153.4,-453.61C153.4,-445.5 153.4,-435.64 153.4,-426.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-416.83 157.9,-426.83 153.4,-421.83 153.4,-426.83 153.4,-426.83 153.4,-426.83 153.4,-421.83 148.9,-426.83 153.4,-416.83 153.4,-416.83" style=""/>
+</g>
+<!-- send_api_request_to_openai_api -->
+<g id="node9" class="node" pointer-events="visible" data-name="send_api_request_to_openai_api">
+
+<polygon fill="none" stroke="black" points="284.1,-343.8 22.7,-343.8 22.7,-307.8 284.1,-307.8 284.1,-343.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-321.6" font-family="Times,serif" font-size="14.00" style="">send_api_request_to_openai_api(messages)</text>
+</g>
+<!-- save_conversation&#45;&gt;send_api_request_to_openai_api -->
+<g id="edge8" class="edge" data-name="save_conversation-&gt;send_api_request_to_openai_api">
+
+<path fill="none" stroke="black" d="M153.4,-380.61C153.4,-372.5 153.4,-362.64 153.4,-353.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-343.83 157.9,-353.83 153.4,-348.83 153.4,-353.83 153.4,-353.83 153.4,-353.83 153.4,-348.83 148.9,-353.83 153.4,-343.83 153.4,-343.83" style=""/>
+</g>
+<!-- execute_function_call -->
+<g id="node10" class="node" pointer-events="visible" data-name="execute_function_call">
+
+<polygon fill="none" stroke="black" points="251.76,-270.8 55.04,-270.8 55.04,-234.8 251.76,-234.8 251.76,-270.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-248.6" font-family="Times,serif" font-size="14.00" style="">execute_function_call(message)</text>
+</g>
+<!-- send_api_request_to_openai_api&#45;&gt;execute_function_call -->
+<g id="edge9" class="edge" data-name="send_api_request_to_openai_api-&gt;execute_function_call">
+
+<path fill="none" stroke="black" d="M153.4,-307.61C153.4,-299.5 153.4,-289.64 153.4,-280.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-270.83 157.9,-280.83 153.4,-275.83 153.4,-280.83 153.4,-280.83 153.4,-280.83 153.4,-275.83 148.9,-280.83 153.4,-270.83 153.4,-270.83" style=""/>
+</g>
+<!-- ask_postgres_database -->
+<g id="node11" class="node" pointer-events="visible" data-name="ask_postgres_database">
+
+<polygon fill="none" stroke="black" points="306.7,-197.8 0.1,-197.8 0.1,-161.8 306.7,-161.8 306.7,-197.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-175.6" font-family="Times,serif" font-size="14.00" style="">ask_postgres_database(postgres_connection, query)</text>
+</g>
+<!-- execute_function_call&#45;&gt;ask_postgres_database -->
+<g id="edge10" class="edge" data-name="execute_function_call-&gt;ask_postgres_database">
+
+<path fill="none" stroke="black" d="M153.4,-234.61C153.4,-226.5 153.4,-216.64 153.4,-207.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-197.83 157.9,-207.83 153.4,-202.83 153.4,-207.83 153.4,-207.83 153.4,-207.83 153.4,-202.83 148.9,-207.83 153.4,-197.83 153.4,-197.83" style=""/>
+</g>
+<!-- configure_logger_from_file -->
+<g id="node12" class="node" pointer-events="visible" data-name="configure_logger_from_file">
+
+<polygon fill="none" stroke="black" points="269.26,-124.8 37.54,-124.8 37.54,-88.8 269.26,-88.8 269.26,-124.8" style=""/>
+<text text-anchor="middle" x="153.4" y="-102.6" font-family="Times,serif" font-size="14.00" style="">configure_logger_from_file(file_path)</text>
+</g>
+<!-- ask_postgres_database&#45;&gt;configure_logger_from_file -->
+<g id="edge11" class="edge" data-name="ask_postgres_database-&gt;configure_logger_from_file">
+
+<path fill="none" stroke="black" d="M153.4,-161.61C153.4,-153.5 153.4,-143.64 153.4,-134.58" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-124.83 157.9,-134.83 153.4,-129.83 153.4,-134.83 153.4,-134.83 153.4,-134.83 153.4,-129.83 148.9,-134.83 153.4,-124.83 153.4,-124.83" style=""/>
+</g>
+<!-- end -->
+<g id="node13" class="node" pointer-events="visible" data-name="end">
+
+<polygon fill="none" stroke="black" points="180.4,-36 126.4,-36 126.4,0 180.4,0 180.4,-36" style=""/>
+<text text-anchor="middle" x="153.4" y="-13.8" font-family="Times,serif" font-size="14.00" style="">end</text>
+</g>
+<!-- configure_logger_from_file&#45;&gt;end -->
+<g id="edge12" class="edge" data-name="configure_logger_from_file-&gt;end">
+
+<path fill="none" stroke="black" d="M153.4,-88.65C153.4,-76.6 153.4,-60.23 153.4,-46.39" style=""/>
+<polygon fill="black" stroke="black" points="153.4,-36.41 157.9,-46.41 153.4,-41.41 153.4,-46.41 153.4,-46.41 153.4,-46.41 153.4,-41.41 148.9,-46.41 153.4,-36.41 153.4,-36.41" style=""/>
+<text text-anchor="middle" x="164.68" y="-58.2" font-family="Times,serif" font-size="14.00" style="">End</text>
+</g>
+</g>
+</svg>

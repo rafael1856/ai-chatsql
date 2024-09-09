@@ -60,7 +60,8 @@ The active selection is a tree-like representation of the directory structure of
 
 - `utils`: This directory contains utility scripts that are used throughout the project. The names of the files suggest that they contain various functions for interacting with APIs (`api_functions.py`), handling chat functionality (`chat_functions.py`), configuring the application (`config.py` and `config.json`), interacting with a database (`database_functions.py`), calling functions (`function_calling_spec.py`), general helper functions (`helper_functions.py`), configuring logging (`logger_config.py`), and handling system prompts (`system_prompts.py`).
 
-# Installation 
+# Installation locally
+
 
 1. Clone this repository with 'git clone URL'
         git clone git@github.com:rafael1856/ai-chatsql.git
@@ -98,23 +99,43 @@ The active selection is a tree-like representation of the directory structure of
 5. Setup conda enviroment
     Linux
         from bash terminal, in the app folder
-        run: source ./setup_conda
+        run: source bin/setup_conda.sh
     Windows
         from command terminal, in the app folder
         run: conda env create -f conda_config.yaml
         run: activate chatsql
+
+    
+# Installation with Dockers
+
+1. Clone this repository with 'git clone URL'
+        git clone git@github.com:rafael1856/ai-chatsql.git
+      
+2. Install Docker (only first time)
+        Read document about 
+
+3. Build images
+    run: build-docker-images.sh
+    results:
+        3 images created:
+            verifiy the images running and accesible
+      
 
 # Running the SqlChatbot 
     First time will ask for authorization email to use streamlit. 
     The app will be open in your default web browser.
 
     Linux
-    - run: chmod 755 ./start.sh (if it was not executable)
+        - run: chmod 755 ./start.sh (if it was not executable)
         ./start.sh
    
     Windows
-    - Be sure you have all setting updated on start.bat and run start.bat
+        - Be sure you have all setting updated on start.bat and run start.bat
 
+    Docker
+        - browser: http://localhost:8501
+
+# How to use it
 # How to use it
 
 * Ask questions related to data stored in the database the chatbot is connected to
@@ -128,4 +149,3 @@ coddx.coddx-alpha
 cweijan.dbclient-jdbc
 cweijan.vscode-postgresql-client2
 mayank1513.trello-kanban-task-board
-

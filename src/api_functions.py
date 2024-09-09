@@ -18,10 +18,12 @@ Exceptions:
 
 import json
 import requests
+# import ollama 
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from database_functions import ask_postgres_database, postgres_connection
 from logger_config import configure_logger_from_file
 from config import OPENAI_API_KEY, AI_MODEL
+
 
 # Configure the logger based on the parameter file
 logger = configure_logger_from_file('config.json')
@@ -52,15 +54,40 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
 
     try:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
-        json_data = {"model": model, "messages": messages}
+        
+        # json_data = {"model": model, "messages": messages}
+        json_data = {"model": "llama3.1", "messages": messages}
+
         logger.debug(f"model: {model}\n")
         logger.debug(f"messages: {messages}\n")
+        
         if functions:
             json_data.update({"functions": functions})
         if function_call:
             json_data.update({"function_call": function_call})
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, \
-                                 json=json_data, timeout=60)
+            
+            
+            
+        # response = requests.post("https://api.openai.com/v1/chat/completions",
+        #                          headers=headers, json=json_data, timeout=60)
+        response = requests.post("https://api.openai.com/v1/chat/completions",
+                                 headers=headers, json=json_data, timeout=60)
+        
+        response = requests.post("http://localhost:11434/api/generate", headers=headers, data=json.dumps(json_data))
+
+# from brave ai
+# import requests
+# import json
+
+# data = {
+#     "model": "llama2",  # Replace with desired model
+#     "prompt": "Your text prompt here"
+# }
+
+# headers = {"Content-Type": "application/json"}
+
+# response = requests.post("http://localhost:11434/api/generate", headers=headers, data=json.dumps(data))
+
         response.raise_for_status()
         logger.debug(f"response: {response}\n")
         return response
@@ -82,12 +109,11 @@ def execute_function_call(message):
 
     """
     logger.debug(f"Entering execute_function_call with message: {message}")
+    
     if message["function_call"]["name"] == "ask_postgres_database":
         query = json.loads(message["function_call"]["arguments"])["query"]
-        # print(f"SQL query: {query} \n")
         logger.info(f"SQL query: {query} \n")
         results = ask_postgres_database(postgres_connection, query)
-        # print(f"Results A: {results} \n")
         logger.info(f"Results A: {results} \n")
     else:
         results = f"Error: function {message['function_call']['name']} does not exist"

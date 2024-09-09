@@ -5,7 +5,7 @@
 env_name=$(grep 'name:' conf/conda_config.yaml | cut -d ' ' -f 2)
 
 # Get the name of the current conda environment
-current_env=$(conda env list | grep '*' | awk '{print $1}')
+current_env=$(micromamba env list | grep '*' | awk '{print $1}')
 
 # Check if the environments match
 if [ "$env_name" != "$current_env" ]; then
