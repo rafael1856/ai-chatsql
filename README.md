@@ -149,3 +149,11 @@ coddx.coddx-alpha
 cweijan.dbclient-jdbc
 cweijan.vscode-postgresql-client2
 mayank1513.trello-kanban-task-board
+
+# error
+- funcionara desde pgadmin ?
+
+postgres:x:999:999::/var/lib/postgresql:/bin/bash
+root@7479520bec4c:/code# psql
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
+root@7479520bec4c:/code#

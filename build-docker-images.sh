@@ -3,7 +3,8 @@
 # get enviroment variables
 source .env_dockers
  
-docker compose create --build --force-recreate --remove-orphans 
+# docker compose create --build --force-recreate --remove-orphans 
+docker compose create --build --remove-orphans --force-recreate
 
 # list images and containers
 docker ps -a

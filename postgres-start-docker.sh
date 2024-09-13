@@ -6,20 +6,26 @@
 
 
 ##############################################
-
-
-export OLLAMA_KEEP_ALIVE=24h
-export MODEL="llama3.1"
-export OLLAMA_HOST="0.0.0.0:11434"
+docker start pgvector1
 
 
 
-echo "########################"
-echo " starting LITELLM SETUP "
-echo "########################"
+# checking postres is running
 
-# # running on http://0.0.0.0:4000 
-/code/litellm_env/bin/litellm --model ollama/$MODEL  > server_litellm.log 
+sudo pg_createcluster 15 main -- --initdb
+
+# postgres@7479520bec4c:~/data$ pg_createcluster 12 main -- --initdb
+# Error: no initdb program for version 12 found
+
+# postgres@7479520bec4c:~/data$ pg_createcluster 12 main -- --initdb
+# Error: no initdb program for version 12 found
+# postgres@7479520bec4c:~/data$ postgres --version
+# postgres (PostgreSQL) 15.4 (Debian 15.4-2.pgdg120+1)
+# postgres@7479520bec4c:~/data$ 
+
+# as postgres user 'sudo' is not nedeed
+sudo /usr/lib/postgresql/15/bin/pg_ctl init -D /var/lib/postgresql/15/main
+
 
 
 # sleep 10
