@@ -1,4 +1,3 @@
-name: chatsql
 channels:
   - conda-forge
   - defaults
@@ -9,5 +8,3 @@ dependencies:
   - psycopg2==2.9.9
   - tiktoken==0.3.1
   - ollama
-pip:
-  - dotenv

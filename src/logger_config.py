@@ -25,7 +25,7 @@ import os
 import json
 
 
-def setup_logger(log_level):
+def setup_logger(log_level,log_title:str=None):
     """
     Set up a logger with the specified log level.
 
@@ -37,7 +37,7 @@ def setup_logger(log_level):
 
     """
     # Create a logger
-    logger = logging.getLogger('my_logger')
+    logger = logging.getLogger(log_title)
     logger.setLevel(log_level)
 
     # Create a file handler

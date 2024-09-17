@@ -28,11 +28,12 @@ message does not have a 'role' key, the function raises a KeyError.
 import tiktoken
 import streamlit as st
 from config import AI_MODEL
+import requests
 from api_functions import send_api_request_to_openai_api, execute_function_call
-from logger_config import configure_logger_from_file
 
-# Configure the logger based on the parameter file
-logger = configure_logger_from_file('config.json')
+import logging
+from logger_config import setup_logger
+logger = setup_logger('DEBUG',"chat_functions.py")
 
 def run_chat_sequence(messages, functions):
     """
@@ -49,6 +50,8 @@ def run_chat_sequence(messages, functions):
         KeyError: If the assistant message does not have a 'role' key.
     """
     logger.debug(f"Entering run_chat_sequence with messages: {messages}, functions: {functions}")
+    
+    
     if "live_chat_history" not in st.session_state:
         st.session_state["live_chat_history"] = [{"role": "assistant", "content": "Hello! I'm Andy, how can I assist you?"}]
         # st.session_state["live_chat_history"] = []
@@ -56,7 +59,12 @@ def run_chat_sequence(messages, functions):
     internal_chat_history = st.session_state["live_chat_history"].copy()
 
     chat_response = send_api_request_to_openai_api(messages, functions)
+    
+    logger.debug(f"Chat response: {chat_response.json()}")
+    
     assistant_message = chat_response.json()["choices"][0]["message"]
+    
+    
     if assistant_message["role"] == "assistant":
         internal_chat_history.append(assistant_message)
 
@@ -71,6 +79,7 @@ def run_chat_sequence(messages, functions):
     results = st.session_state["live_chat_history"][-1]
     logger.debug(f"Exiting run_chat_sequence with last message:{results}")
     return results
+
 
 def clear_chat_history():
     """Clears the chat history stored in the Streamlit session state.
@@ -102,6 +111,7 @@ def count_tokens(text):
     logger.debug(f"Entering count_tokens with text: {text}")
     if not isinstance(text, str):
         return 0
+    
     encoding = tiktoken.encoding_for_model(AI_MODEL)
     total_tokens_in_text_string = len(encoding.encode(text))
     logger.debug(f"Exiting count_tokens with total tokens: {total_tokens_in_text_string}")

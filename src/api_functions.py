@@ -24,12 +24,10 @@ from database_functions import ask_postgres_database, postgres_connection
 from logger_config import configure_logger_from_file
 from config import OPENAI_API_KEY, AI_MODEL
 
-
 # Configure the logger based on the parameter file
 logger = configure_logger_from_file('config.json')
 
 @retry(wait=wait_random_exponential(min=1, max=40), stop=stop_after_attempt(3))
-
 
 def send_api_request_to_openai_api(messages, functions=None, function_call=None, model=AI_MODEL, openai_api_key=OPENAI_API_KEY):
     """
@@ -55,8 +53,8 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
     try:
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
         
-        # json_data = {"model": model, "messages": messages}
-        json_data = {"model": "llama3.1", "messages": messages}
+        json_data = {"model": model, "messages": messages}
+        # json_data = {"model": "llama3.1", "messages": messages}
 
         logger.debug(f"model: {model}\n")
         logger.debug(f"messages: {messages}\n")
@@ -64,29 +62,15 @@ def send_api_request_to_openai_api(messages, functions=None, function_call=None,
         if functions:
             json_data.update({"functions": functions})
         if function_call:
-            json_data.update({"function_call": function_call})
+            json_data.update({"function_call": function_call})     
             
-            
-            
-        # response = requests.post("https://api.openai.com/v1/chat/completions",
-        #                          headers=headers, json=json_data, timeout=60)
         response = requests.post("https://api.openai.com/v1/chat/completions",
                                  headers=headers, json=json_data, timeout=60)
         
-        response = requests.post("http://localhost:11434/api/generate", headers=headers, data=json.dumps(json_data))
-
-# from brave ai
-# import requests
-# import json
-
-# data = {
-#     "model": "llama2",  # Replace with desired model
-#     "prompt": "Your text prompt here"
-# }
-
-# headers = {"Content-Type": "application/json"}
-
-# response = requests.post("http://localhost:11434/api/generate", headers=headers, data=json.dumps(data))
+        # response = requests.post("http://aiollallm1:11434/api/generate", 
+        #                          headers=headers, data=json.dumps(json_data))
+        
+        # response = requests.post("http://localhost:11434/api/generate", headers=headers, data=json.dumps(json_data))
 
         response.raise_for_status()
         logger.debug(f"response: {response}\n")

@@ -4,9 +4,9 @@
 source .env
 
 # run fisrt time to create container
-docker run -dt -p 24000:4000 -p 21434:11434 --name myollallm ollallmpg-ollallm:latest
+docker run -dt -p 24000:4000 -p 21434:11434 --name ollallm1 ai-chatsql-ollallm:latest
 # Execute script inside container
-docker exec myollallm bash /code/ollallm-start-docker-programs.sh &
+docker exec ollallm1 bash /code/ollallm-start-docker-programs.sh &
 
 ############### doc ##################
 # Run Docker container if it exists

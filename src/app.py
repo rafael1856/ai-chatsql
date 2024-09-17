@@ -27,10 +27,11 @@ from chat_functions import run_chat_sequence, clear_chat_history, count_tokens, 
 from database_functions import database_schema_dict
 from function_calling_spec import functions
 from helper_functions import  save_conversation
-from logger_config import configure_logger_from_file
 
-# Configure the logger based on the parameter file
-logger = configure_logger_from_file('config.json')
+import logging
+from logger_config import setup_logger
+logger = setup_logger('DEBUG',__name__)
+
 
 def check_env_vars():
     """
@@ -39,7 +40,7 @@ def check_env_vars():
     Returns:
         bool: True if all environment variables are set, False otherwise.
     """
-    varis = ['POSTGRES_SEMANTIC_DB', 'POSTGRES_USERNAME', 'POSTGRES_PASSWORD', 'POSTGRES_HOST', 'POSTGRES_PORT']
+    varis = ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_HOST', 'POSTGRES_PORT']
     for var in varis:
         if var not in os.environ:
             logger.debug(f"Environment variable {var} is not set.")
@@ -70,12 +71,17 @@ if __name__ == "__main__":
         print('Please set the conda environment before starting the app.')
         sys.exit()
     sidebar_data = prepare_sidebar_data(database_schema_dict)
+    logger.debug(f"sidebar_data = {sidebar_data} .")
+    
+    st.sidebar.title("Postgres Viewer")
 
-    st.sidebar.title("Postgres DB Objects Viewer")
 
     selected_schema = st.sidebar.selectbox("Select a schema", list(sidebar_data.keys()))
+    logger.debug(f"selected_schema = {selected_schema} .")
+
 
     selected_table = st.sidebar.selectbox("Select a table", list(sidebar_data[selected_schema].keys()))
+
 
     st.sidebar.subheader(f"Columns in {selected_table}")
     for column in sidebar_data[selected_schema][selected_table]:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get update && apt-get update && apt-get install -y curl python3.12-full pip nano git lsof supervisor
+apt-get update && apt-get update && apt-get install -y -y iputils-ping iproute2 curl nano git lsof supervisor python3.12-full pip
 
 # TODO move enviroemnt varaibles to .env ?
 export OLLAMA_KEEP_ALIVE=24h

@@ -1,20 +1,18 @@
 #!/bin/bash
 
 # get enviroment variables
-source .env_dockers
+source .env
  
-# docker compose create --build --force-recreate --remove-orphans 
-docker compose create --build --remove-orphans --force-recreate
+# create images  and containers
+# docker compose create --build --force-recreate 
+
+# create only images 
+# docker compose build --no-cache
+
+# create images, containers and start them
+docker compose up & # --no-cache
 
 # list images and containers
 docker ps -a
 docker images
 
-# Start PostgreSQL container
-# docker-compose up -d db
-
-# # Start pgAdmin container
-# docker-compose up -d pgadmin
-
-# # Verify services are running
-# docker-compose ps

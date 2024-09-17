@@ -159,7 +159,7 @@ def ask_postgres_database(connection, query):
 # To print details to the console:
 # schemas = get_schema_names(postgres_connection)
 # here you need to set schema name from postgres by default the schema is public in postgres database. you can see in pgadmin
-schemas = ['employees']
+schemas = ['listings']
 database_schema_dict = get_database_info(postgres_connection, schemas)
 database_schema_string = "\n".join(
     [

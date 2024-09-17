@@ -1,34 +1,44 @@
 services:
-  # mamba:
-  #   image: condaforge/miniforge3:latest
-  #   volumes:
-  #     - .:/code
-  #   container_name: mamba1
-  #   pull_policy: always
-  #   tty: true
-  #   restart: always
-  #   networks:
-  #     - group1-docker
+  mamba:
+    image: condaforge/miniforge3:latest
+    volumes:
+      - .:/code
+    container_name: mamba1
+    pull_policy: always
+    tty: true
+    ports:
+      - 8501:8501   
+    restart: always
+    networks:
+      - group1-docker
 
-  # ollallm:
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile-ollallm
-  #   container_name: ollallm1
-  #   ports:
-  #     - 21434:11434
-  #     - 24000:4000
-  #   volumes:
-  #     - .:/code
-  #   pull_policy: always
-  #   tty: true
-  #   restart: always
-  #   environment:
-  #     - OLLAMA_KEEP_ALIVE=24h
-  #     - OLLAMA_HOST=0.0.0.0
-  #     - OLLAMA_DEBUG=1 
-  #   networks:
-  #     - group1-docker
+  ollallm:
+    hostname: aiollallm1
+    build:
+      context: .
+      dockerfile: dockerfile-ollallm
+    container_name: ollallm1
+    ports:
+      - 21434:11434
+      - 24000:4000
+    volumes:
+      - .:/code
+    pull_policy: always
+    tty: true
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_DEBUG=1 
+    networks:
+      - group1-docker
+    # command: 
+    #   - sh 
+    #   - -c 
+    #   - | 
+    #     apt-get update 
+    #     apt-get update 
+    #     apt-get install -y iputils-ping iproute2 curl nano git lsof supervisor
 
   pgvector:
     hostname: pgvectordb1
@@ -49,6 +59,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - group1-docker
+    # command: 
+    #   - sh 
+    #   - -c 
+    #   - | 
+    #     apt-get update 
+    #     apt-get update 
+    #     apt-get install -y iputils-ping iproute2 curl nano git lsof supervisor
       
   pgadmin:
     image: dpage/pgadmin4
@@ -64,6 +83,8 @@ services:
     volumes:
       - ./pgadmin-data:/var/lib/pgadmin
       - /var/log/pgadmin:/var/log/pgadmin
+    networks:
+      - group1-docker
 
 networks:
   group1-docker:

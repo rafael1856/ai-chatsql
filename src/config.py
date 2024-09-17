@@ -28,19 +28,21 @@ load_dotenv()
 
 # Set up Postgres database credentials
 db_credentials = {
-    'dbname'    :   os.getenv("POSTGRES_SEMANTIC_DB"),
-    'user'      :   os.getenv("POSTGRES_USERNAME"),
+    'dbname'    :   os.getenv("POSTGRES_DB"),
+    'user'      :   os.getenv("POSTGRES_USER"),
     'password'  :   os.getenv("POSTGRES_PASSWORD"),
     'host'      :   os.getenv("POSTGRES_HOST"),
     'port'      :   os.getenv("POSTGRES_PORT")
 }
 
 # Set up OpenAI variables
-# OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
-# AI_MODEL        =   'gpt-3.5-turbo-16k'
+OPENAI_API_KEY  =   os.getenv("OPENAI_API_KEY")
+# AI_MODEL        =   "gpt-4o" ------> tiktoken cannot resolve this model
+AI_MODEL        = "gpt-3.5-turbo"
 
-OPENAI_API_KEY  =   "ollama-is-free"
-AI_MODEL        =   'llama3.1'
+
+# OPENAI_API_KEY  =   "ollama-is-free"
+# AI_MODEL        =   'llama3.1'
 
 # Max number of tokens permitted within a conversation exchange via OpenAI API
 MAX_TOKENS_ALLOWED      =   3000
