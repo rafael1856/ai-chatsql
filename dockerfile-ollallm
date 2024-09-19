@@ -1,0 +1,22 @@
+FROM ubuntu:latest
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/New_York
+RUN echo "America/New_York" > /etc/timezone
+
+# folder in docker container used for the files copied
+WORKDIR /code/
+
+# copy only the script files to WORKDIR
+
+COPY ./ollallm-setup-docker.sh ./
+COPY ./ollallm-start-docker-programs.sh ./
+
+EXPOSE 11434 4000
+
+RUN /code/ollallm-setup-docker.sh 
+
+
+
+
+

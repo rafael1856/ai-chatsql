@@ -1,31 +1,23 @@
 #!/bin/bash
-# This script sets up the Conda environment for the project.
-# 
+# This script setup conda environment for the project.
+# conda,miniconda, mamba and micromamba are all similar tools
+# any of them are fine to use.
+# Use source to run this script:
+#
+# source bin/setup-conda.sh
 #
 
 APP_PATH=$(dirname "$0")
 
-# get enviroment name from the conda_config.yaml file
 yaml_file_path="conf/conda_config.yaml"
+
+# get enviroment name from the conda_config.yaml file
 enviro=$(grep 'name:' "$yaml_file_path" | awk '{print $2}')
 
-if [ -z "$enviro" ] ; then
-  echo "Error: Environment name not found in conda_config.yaml"
-  # Set enviro to the name of the current directory
-  enviro=$(basename "$PWD")
-fi
+micromamba create -f $yaml_file_path -n $enviro -y
 
-# Check if the environment exists
-if ! conda env list | grep -q "$enviro"; then
-  echo "Creating a new conda environment named $enviro..."
-  # Create a new conda environment named "$enviro" using the configuration file "conda_config.yaml"
-  conda env create -f $yaml_file_path -n $enviro -y
-fi
+micromamba activate $enviro
 
-echo " ------------------------------ "
-echo "conda activate "$enviro
-echo "pip install -r requirements.txt"
-echo " ------------------------------ "
-echo "To remove a conda environment, use the following command:"
-echo "conda env remove --name myenv"
-echo "or rm -rf /path/to/anaconda3/envs/myenv"
+pip install --upgrade pip setuptools
+pip install  python-dotenv
+

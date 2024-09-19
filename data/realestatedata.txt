@@ -1,0 +1,8 @@
+Selected database from:
+https://gist.github.com/SimonGoring/40450c1c4a86b22fa54afd9542f2a546
+
+another:
+https://github.com/Koda7/Real-Estate/blob/main/Real%20Estate%20DBMS/RealEstate.sql
+
+zillow:
+https://data.world/zillow-data/market-health-index

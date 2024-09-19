@@ -1,0 +1,94 @@
+services:
+  mamba:
+    image: condaforge/miniforge3:latest
+    volumes:
+      - .:/code
+    container_name: mamba1
+    pull_policy: always
+    tty: true
+    ports:
+      - 8501:8501   
+    restart: always
+    networks:
+      - group1-docker
+
+  ollallm:
+    hostname: aiollallm1
+    build:
+      context: .
+      dockerfile: dockerfile-ollallm
+    container_name: ollallm1
+    ports:
+      - 21434:11434
+      - 24000:4000
+    volumes:
+      - .:/code
+    pull_policy: always
+    tty: true
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_DEBUG=1 
+    networks:
+      - group1-docker
+    # command: 
+    #   - sh 
+    #   - -c 
+    #   - | 
+    #     apt-get update 
+    #     apt-get update 
+    #     apt-get install -y iputils-ping iproute2 curl nano git lsof supervisor
+
+  pgvector:
+    hostname: pgvectordb1
+    container_name: pgvector1
+    image: ankane/pgvector
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./local_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - group1-docker
+    # command: 
+    #   - sh 
+    #   - -c 
+    #   - | 
+    #     apt-get update 
+    #     apt-get update 
+    #     apt-get install -y iputils-ping iproute2 curl nano git lsof supervisor
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin1
+    restart: unless-stopped
+    ports:
+      - 20080:80
+    # user: "$UID:$GID"
+    user: "root"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - ./pgadmin-data:/var/lib/pgadmin
+      - /var/log/pgadmin:/var/log/pgadmin
+    networks:
+      - group1-docker
+
+networks:
+  group1-docker:
+    external: false
+  
+# docker compose up --build
+# debugging:  docker logs pgadmin1
