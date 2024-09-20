@@ -1,7 +1,7 @@
 # AI Database Chatbot
 This is a fork from https://github.com/sdw-online/ai-postgres-database-chatbot
 
-This is an AI chatbot that is able to answer any question about the information stored in a relational database. The chatbot created is plugged into a Postgres database. 
+This is an AI chatbot that is able to answer any question about the information stored in a relational database. The chatbot created is plugged into a Postgres database. Additionally this version runs on a Docker container. Also postgress and pgadmin running on Docker.
 
 # Tools 
 
@@ -46,7 +46,10 @@ The active selection is a tree-like representation of the directory structure of
 
 - `conversation_history`: This directory might contain logs or records of past conversations if this is a chatbot or similar application.
 
-- `data`: This directory contains data used by the application. The `employees.sql.gz` file is a compressed SQL file, likely containing data about employees.
+- `data`: This directory contains sample data used by the application. 
+    Clean_db.sql, realstatedb.sql and fill_db.sql are sql script to create and fillup RealSateDB.
+    The `employees.sql.gz` file is a compressed SQL file, likely containing data about employees.
+    Realstatedata.txt and zillow-data.txt are text files containing data about real estate.
 
 - `logs`: This directory contains log files. The `app.log` file is a log file for the main application.
 
@@ -62,14 +65,32 @@ The active selection is a tree-like representation of the directory structure of
 
 # Installation locally
 
-
 1. Clone this repository with 'git clone URL'
         git clone git@github.com:rafael1856/ai-chatsql.git
       
-2. Install PostgreSQL (only first time)
-        Read document about postgresql at 'docs' folder
+2. Install Docker (only first time)
+        [Read document about](https://docs.docker.com/engine/install/) 
 
-3. Add your database credentials in the user enviroment.
+
+3. Add your database credentials in the .env file:
+        # for postgres and pgadmin
+        export POSTGRES_DB=realestate
+        export POSTGRES_USER=myuser
+        export POSTGRES_PASSWORD=mypassword
+        export PGADMIN_DEFAULT_EMAIL=admin@example.com
+        export PGADMIN_DEFAULT_PASSWORD=adminpassword
+
+        export POSTGRES_HOST='pgvectordb1'
+        export POSTGRES_PORT='5432'
+
+        # for ollama and litellm
+        export OLLAMA_HOST="127.0.0.1:11434"
+        export OLLAMA_KEEP_ALIVE=24h
+        export OLLAMA_DEBUG=1        
+
+        # 
+        export UID="$(id -u)"
+        export GID="$(id -g)"
     
     In linux bash create a file 'env-vars' in the up-folder for app.
     This file should not be at the app folder for security reasons:
@@ -80,9 +101,6 @@ The active selection is a tree-like representation of the directory structure of
       export POSTGRES_HOST='localhost'
       export POSTGRES_PORT='5432'
     ```
-
-    In Windows, update your start.bat file with the corresponding values 
-    for your database.
 
 4. Add your OpenAI API key in the user enviroment
     Linux bash, add to your .bashrc file:
@@ -96,64 +114,55 @@ The active selection is a tree-like representation of the directory structure of
       set OPENAI_API_KEY='your-api-key-value'
     ```  
 
-5. Setup conda enviroment
-    Linux
-        from bash terminal, in the app folder
-        run: source bin/setup_conda.sh
-    Windows
-        from command terminal, in the app folder
-        run: conda env create -f conda_config.yaml
-        run: activate chatsql
-
     
-# Installation with Dockers
-
-1. Clone this repository with 'git clone URL'
-        git clone git@github.com:rafael1856/ai-chatsql.git
-      
-2. Install Docker (only first time)
-        Read document about 
-
-3. Build images
+5. Build images
     run: build-docker-images.sh
     results:
-        3 images created:
-            verifiy the images running and accesible
-      
+        ``` 
+        4 images created:
+            verifiy the images running: docker image ls
+        
+        ai-chatsql-ollallm (~ 10Gb)
+        ankane/pgvector (~ 0.5Gb)
+        dpage/pgadmin4  (~ 0.5Gb)
+        condaforge/miniforge3:latest (~ 0.5Gb)
+        
+        4 verify the containers created running: docker ps
 
-# Running the SqlChatbot 
-    First time will ask for authorization email to use streamlit. 
-    The app will be open in your default web browser.
+        ollallm1
+        pgvector1
+        pgadmin1
+        mamba1
 
-    Linux
-        - run: chmod 755 ./start.sh (if it was not executable)
-        ./start.sh
-   
-    Windows
-        - Be sure you have all setting updated on start.bat and run start.bat
+        And it should get these port mappings:
 
-    Docker
-        - browser: http://localhost:8501
+        ollallm1
+        0.0.0.0:24000->4000/tcp, [::]:24000->4000/tcp, 0.0.0.0:21434->11434/tcp, [::]:21434->11434/tcp   
 
-# How to use it
+        pgvector1
+        0.0.0.0:5432->5432/tcp, :::5432->5432/tcp                                                        
+
+        pgadmin1
+        443/tcp, 0.0.0.0:20080->80/tcp, [::]:20080->80/tcp                                               
+
+        mamba1
+        0.0.0.0:8501->8501/tcp, :::8501->8501/tcp                                                        
+        ```
+
+        Is status of the containers: is NOT up and running. Run:
+        1) for start ollama + litellm: start-docker-ollallm.sh
+        2) for start pgadmin and postgress: start-docker-postgres.sh
+        3) for start ai-chatsql: start-docker-app.sh
+
+
+# Running the SqlChatbot web interface
+    browser: http://localhost:8501
+
+# running pgadmin web interface
+    browser: http://localhost:20080
+
 # How to use it
 
 * Ask questions related to data stored in the database the chatbot is connected to
 * Get answers - Enjoy the structured and dynamic answers the chatbot provides  
-* Save conversations - Preserve conversations into a markdown file for your future use 
-
-# Visual Code extensions
-arpinfidel.chartographer-extra
-bierner.markdown-preview-github-styles
-coddx.coddx-alpha
-cweijan.dbclient-jdbc
-cweijan.vscode-postgresql-client2
-mayank1513.trello-kanban-task-board
-
-# error
-- funcionara desde pgadmin ?
-
-postgres:x:999:999::/var/lib/postgresql:/bin/bash
-root@7479520bec4c:/code# psql
-psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
-root@7479520bec4c:/code#
+* Save conversations - Preserve conversations into a markdown file for your future use
