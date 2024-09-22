@@ -41,7 +41,7 @@ def setup_logger(log_level,log_title:str=None):
     logger.setLevel(log_level)
 
     # Create a file handler
-    handler = logging.FileHandler('logs/app.log')
+    handler = logging.FileHandler('../logs/app.log')
     handler.setLevel(log_level)
 
     # Create a logging format

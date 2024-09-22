@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# get enviroment variables
-source .env
+
+
 
 # if mamba1 container does not exist, create it. Else start it
 CONTAINER_NAME="mamba1"
@@ -22,8 +22,11 @@ done
 # copy .env to docker app folder (/code)
 docker cp .env $CONTAINER_NAME:/code/
 
+# get enviroment variables
+source .env
+
 # Execute script inside container
-docker exec $CONTAINER_NAME bash /code/app-setup-docker-program.sh &
+docker exec $CONTAINER_NAME bash /code/app-setup-docker-program.sh
 
 # start the python app inside the container
 docker exec $CONTAINER_NAME bash /code/app-start-docker-program.sh &

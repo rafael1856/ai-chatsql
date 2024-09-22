@@ -9,6 +9,8 @@ services:
     ports:
       - 8501:8501   
     restart: always
+    environment:
+      - HOST=0.0.0.0
     networks:
       - group1-docker
 
@@ -61,7 +63,6 @@ services:
     restart: unless-stopped
     ports:
       - 20080:80
-    # user: "$UID:$GID"
     user: "root"
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
