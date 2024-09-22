@@ -1,16 +1,21 @@
 #!/bin/bash
 
+
+
+echo "America/New_York" > /etc/timezone
+
+# move to the app folder
+cd /code/
+
 # get enviroment variables
 source .env
 
-# move to the docer app folder
-cd /code/
-
-# mamba install -f conf/conda_config.yaml -y
+# install conda environment
 mamba env update --name base --file /code/conf/conda_config.yaml 
 
 # pip install --upgrade pip setuptools
-pip install  python-dotenv
+pip install python-dotenv
+
 
 
 

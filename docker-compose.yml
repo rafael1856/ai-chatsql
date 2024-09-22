@@ -9,6 +9,8 @@ services:
     ports:
       - 8501:8501   
     restart: always
+    environment:
+      - HOST=0.0.0.0
     networks:
       - group1-docker
 
@@ -32,13 +34,6 @@ services:
       - OLLAMA_DEBUG=1 
     networks:
       - group1-docker
-    # command: 
-    #   - sh 
-    #   - -c 
-    #   - | 
-    #     apt-get update 
-    #     apt-get update 
-    #     apt-get install -y iputils-ping iproute2 curl nano git lsof supervisor
 
   pgvector:
     hostname: pgvectordb1
@@ -61,13 +56,6 @@ services:
       retries: 5
     networks:
       - group1-docker
-    # command: 
-    #   - sh 
-    #   - -c 
-    #   - | 
-    #     apt-get update 
-    #     apt-get update 
-    #     apt-get install -y iputils-ping iproute2 curl nano git lsof supervisor
       
   pgadmin:
     image: dpage/pgadmin4
@@ -75,7 +63,6 @@ services:
     restart: unless-stopped
     ports:
       - 20080:80
-    # user: "$UID:$GID"
     user: "root"
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
@@ -90,5 +77,3 @@ networks:
   group1-docker:
     external: false
   
-# docker compose up --build
-# debugging:  docker logs pgadmin1

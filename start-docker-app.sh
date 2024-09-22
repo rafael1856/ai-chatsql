@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# get enviroment variables
-source .env
+
+
 
 # if mamba1 container does not exist, create it. Else start it
 CONTAINER_NAME="mamba1"
@@ -14,6 +14,21 @@ else
     docker run -dt -p 8501:8501 --name  $CONTAINER_NAME condaforge/miniforge3:latest
 fi
 
+# Copy non-hidden files to docker app folder (/code)
+for file in $(find . -maxdepth 1 -type f ! -path '*/\.*'); do
+  docker cp "$file" mamba1:/code/
+done
+
+# copy .env to docker app folder (/code)
+docker cp .env $CONTAINER_NAME:/code/
+
+# get enviroment variables
+source .env
+
 # Execute script inside container
+docker exec $CONTAINER_NAME bash /code/app-setup-docker-program.sh
+
+# start the python app inside the container
 docker exec $CONTAINER_NAME bash /code/app-start-docker-program.sh &
 
+# docker exec mamba1 bash /code/app-start-docker-program.sh &
