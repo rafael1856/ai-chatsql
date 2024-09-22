@@ -92,15 +92,6 @@ The active selection is a tree-like representation of the directory structure of
         export UID="$(id -u)"
         export GID="$(id -g)"
     
-    In linux bash create a file 'env-vars' in the up-folder for app.
-    This file should not be at the app folder for security reasons:
-    ```
-      export POSTGRES_SEMANTIC_DB='employees'
-      export POSTGRES_USERNAME='user_database'
-      export POSTGRES_PASSWORD='pass_database'
-      export POSTGRES_HOST='localhost'
-      export POSTGRES_PORT='5432'
-    ```
 
 4. Add your OpenAI API key in the user enviroment
     Linux bash, add to your .bashrc file:
@@ -151,14 +142,14 @@ The active selection is a tree-like representation of the directory structure of
 
         Is status of the containers: is NOT up and running. Run:
         1) for start ollama + litellm: start-docker-ollallm.sh
-        2) for start pgadmin and postgress: start-docker-postgres.sh
+        2) for start pgadmin and postgres: start-docker-postgres.sh
         3) for start ai-chatsql: start-docker-app.sh
 
 
 # Running the SqlChatbot web interface
     browser: http://localhost:8501
 
-# running pgadmin web interface
+# Running pgadmin web interface
     browser: http://localhost:20080
 
 # How to use it
