@@ -12,9 +12,30 @@ This is an AI chatbot that is able to answer any question about the information 
 
 # Folder Structure 
 ```
-.
-├── app.py
-├── conda_config.yaml
+├── bin
+    ├── app-setup-docker-program.sh
+    ├── app-start-docker-program.sh
+    ├── build-docker-images.sh
+    ├── ollallm-setup-docker.sh
+    ├── ollallm-start-docker-programs.sh
+    ├── setup-conda.sh
+    ├── start-docker-app.sh
+    ├── start-docker-ollallm.sh
+    ├── start-docker-postgres.sh
+    └── start.sh
+├── src
+    ├── api_functions.py
+    ├── app.py
+    ├── chat_functions.py
+    ├── config.json
+    ├── config.py
+    ├── database_functions.py
+    ├── function_calling_spec.py
+    ├── helper_functions.py
+    ├── logger_config.py
+├── conf
+    ├── conda_config.yaml
+    └── config
 ├── conversation_history
 │   └── ....
 ├── data
@@ -25,18 +46,7 @@ This is an AI chatbot that is able to answer any question about the information 
 │   └── postgresql-setup.md
 ├── LICENSE
 ├── README.md
-├── start.sh
-├── start.bat
-└── utils
-    ├── api_functions.py
-    ├── chat_functions.py
-    ├── config.py
-    ├── config.json
-    ├── database_functions.py
-    ├── function_calling_spec.py
-    ├── helper_functions.py
-    ├── logger_config.py
-    └── system_prompts.py
+
 ```
 
 The active selection is a tree-like representation of the directory structure of a software project. Here's a brief explanation of what each file and directory might be used for:
@@ -60,9 +70,7 @@ The active selection is a tree-like representation of the directory structure of
 
 - [``README.md``](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fhome%2Frafael%2Fdev%2Fprojects%2Fai-chatsql%2FREADME.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/home/rafael/dev/projects/ai-chatsql/README.md"): This file usually contains information about the project, such as what it does, how to install it, and how to use it.
 
-- `start.sh` and `start.bat`: These are shell and batch scripts, respectively. They are used to start the application, and the commands they contain will be executed when they are run.
-
-- `utils`: This directory contains utility scripts that are used throughout the project. The names of the files suggest that they contain various functions for interacting with APIs (`api_functions.py`), handling chat functionality (`chat_functions.py`), configuring the application (`config.py` and `config.json`), interacting with a database (`database_functions.py`), calling functions (`function_calling_spec.py`), general helper functions (`helper_functions.py`), configuring logging (`logger_config.py`), and handling system prompts (`system_prompts.py`).
+- `start.sh` other script on bin folder are shell and batch scripts. They are used to start the application, or the docker containers and the commands they contain will be executed when they are run.
 
 # Installation locally
 
@@ -73,40 +81,39 @@ The active selection is a tree-like representation of the directory structure of
         [Read documentation about Docker installation]](https://docs.docker.com/engine/install/) 
 
 
-3. Add your database credentials in the .env file:
+3. Add your configuraton file conf/config::
+     # Set config values
+        # system
+        export DATA_FOLDER="data/"
+        export LOG_FILE="logs/app.log"
+        export SCHEMA="listing"
+        export LOG_LEVEL="ERROR"
+        export STREAMLIT_SERVER_ADDRESS=0.0.0.0
+        export STREAMLIT_SERVER_PORT=8501
+        export APPDIR="/home/nonroot/code"
+        export MNTDIR="/code"
+
         # for postgres and pgadmin
-        export POSTGRES_DB=realestate
-        export POSTGRES_USER=myuser
-        export POSTGRES_PASSWORD=mypassword
-        export PGADMIN_DEFAULT_EMAIL=admin@example.com
-        export PGADMIN_DEFAULT_PASSWORD=adminpassword
-        export POSTGRES_HOST='pgvectordb1'
-        export POSTGRES_PORT='5432'
+        export POSTGRES_DB="realestate24"
+        export POSTGRES_USER="myuser"
+        export POSTGRES_PASSWORD="mypassword"
+        export PGADMIN_DEFAULT_EMAIL="admin@example.com"
+        export PGADMIN_DEFAULT_PASSWORD="adminpassword"
+        export POSTGRES_HOST="pgvectordb1"
+        export POSTGRES_PORT="5432"
 
         # for ollama and litellm
-        export OLLAMA_HOST="127.0.0.1:11434"
+        export OLLAMA_HOST="0.0.0.0:11434"
+        export MODEL="llama3.1"
         export OLLAMA_KEEP_ALIVE=24h
-        export OLLAMA_DEBUG=1        
-
-        # 
+            
+        # TODO: explain the following
         export UID="$(id -u)"
         export GID="$(id -g)"
-    
-
-4. Add your OpenAI API key in the user enviroment
-    Linux bash, add to your .bashrc file:
-    ```
-      export OPENAI_API_KEY='your-api-key-value'
-    ```
-      then reload your .bashrc runnig source .bashrc (only first time)
-
-    Windows modify your the start.bat file:
-    ```
-      set OPENAI_API_KEY='your-api-key-value'
-    ```  
-
-    
-5. Build images
+            
+        export OPENAI_API_KEY="sk-p0ouHvojFbzx8nBhusfsdfdsf"
+   
+4. Build images
     run: build-docker-images.sh
     results:
         ``` 
