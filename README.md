@@ -3,6 +3,7 @@ This is a fork from https://github.com/sdw-online/ai-postgres-database-chatbot
 
 This is an AI chatbot that is able to answer any question about the information stored in a relational database. The chatbot created is plugged into a Postgres database. Additionally this version runs on a Docker container. Also postgress and pgadmin running on Docker.
 
+
 # Tools 
 
 * **Streamlit:** For an interactive, user-friendly web-based interface.
@@ -47,9 +48,9 @@ The active selection is a tree-like representation of the directory structure of
 - `conversation_history`: This directory might contain logs or records of past conversations if this is a chatbot or similar application.
 
 - `data`: This directory contains sample data used by the application. 
-    Clean_db.sql, realstatedb.sql and fill_db.sql are sql script to create and fillup RealSateDB.
+    Clean_db.sql, realestatedb.sql and fill_db.sql are sql script to create and fillup RealEsateDB.
     The `employees.sql.gz` file is a compressed SQL file, likely containing data about employees.
-    Realstatedata.txt and zillow-data.txt are text files containing data about real estate.
+    Realestatedata.txt and zillow-data.txt are text files containing data about real estate.
 
 - `logs`: This directory contains log files. The `app.log` file is a log file for the main application.
 
@@ -69,7 +70,7 @@ The active selection is a tree-like representation of the directory structure of
         git clone git@github.com:rafael1856/ai-chatsql.git
       
 2. Install Docker (only first time)
-        [Read document about](https://docs.docker.com/engine/install/) 
+        [Read documentation about Docker installation]](https://docs.docker.com/engine/install/) 
 
 
 3. Add your database credentials in the .env file:
@@ -79,7 +80,6 @@ The active selection is a tree-like representation of the directory structure of
         export POSTGRES_PASSWORD=mypassword
         export PGADMIN_DEFAULT_EMAIL=admin@example.com
         export PGADMIN_DEFAULT_PASSWORD=adminpassword
-
         export POSTGRES_HOST='pgvectordb1'
         export POSTGRES_PORT='5432'
 
@@ -110,22 +110,21 @@ The active selection is a tree-like representation of the directory structure of
     run: build-docker-images.sh
     results:
         ``` 
-        4 images created:
-            verifiy the images running: docker image ls
+        - verifiy the images running: docker image ls
         
         ai-chatsql-ollallm (~ 10Gb)
         ankane/pgvector (~ 0.5Gb)
         dpage/pgadmin4  (~ 0.5Gb)
         condaforge/miniforge3:latest (~ 0.5Gb)
         
-        4 verify the containers created running: docker ps
+        - verify the containers created running: docker ps
 
         ollallm1
         pgvector1
         pgadmin1
         mamba1
 
-        And it should get these port mappings:
+        - And it should get these port mappings:
 
         ollallm1
         0.0.0.0:24000->4000/tcp, [::]:24000->4000/tcp, 0.0.0.0:21434->11434/tcp, [::]:21434->11434/tcp   

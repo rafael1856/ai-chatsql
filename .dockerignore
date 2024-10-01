@@ -20,7 +20,7 @@
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
-**/bin
+#**/bin
 **/charts
 **/docker-compose*
 **/compose.y*ml
@@ -33,3 +33,8 @@
 **/*.log
 LICENSE
 README.md
+
+# my local psql database
+**/local_pgdata
+# my pgadmin database
+**/pgadmin-data

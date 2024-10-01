@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 conversation_history/
-.env_dockers
+conf/system_config.json
