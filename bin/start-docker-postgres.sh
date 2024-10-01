@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get enviroment variables
-source .env
+source conf/config
 
 # if pgvector1 container does not exist, create it
 CONTAINER_NAME="pgvector1"

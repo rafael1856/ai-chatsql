@@ -1,16 +1,25 @@
 services:
-  mamba:
-    image: condaforge/miniforge3:latest
+  app:
+    hostname: aiapp1
+    build:
+      context: .
+      dockerfile: dockerfile-app
     volumes:
       - .:/code
-    container_name: mamba1
+    container_name: aichatsql
     pull_policy: always
     tty: true
+    expose:
+      - 8501
     ports:
       - 8501:8501   
     restart: always
+    env_file:
+      - conf/config
     environment:
       - HOST=0.0.0.0
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_PORT=8501
     networks:
       - group1-docker
 

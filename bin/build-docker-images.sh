@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get enviroment variables
-source .env
+source conf/config
  
 # create images  and containers
 # docker compose create --build --force-recreate 
